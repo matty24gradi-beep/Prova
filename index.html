@@ -87,8 +87,8 @@
     <header>
       <div class="avatar" aria-hidden="true">👋</div>
       <div>
-        <h1>CLAUDIO GEMELLI</h1>
-        <p class="subtitle">Ecco tutte le informazioni necessarie per seguire la mia campagna elettorale</p>
+        <h1>Il tuo nome / brand</h1>
+        <p class="subtitle">Tutti i link e i file importanti, in un posto solo.</p>
       </div>
     </header>
 
@@ -154,5 +154,114 @@
       <span class="badge">QR‑ready</span>
     </footer>
   </main>
+  <script>
+    const SITE_URL = 'https://votagemelli.github.io/links/';
+    const ICS_URL = './events.ics';
+
+    (function(){
+      const t = document.getElementById('last-updated');
+      if (!t) return;
+      const d = new Date(document.lastModified);
+      const fmt = new Intl.DateTimeFormat('it-IT', { dateStyle: 'long', timeStyle: 'short' });
+      t.textContent = fmt.format(d);
+      t.setAttribute('datetime', d.toISOString());
+    })();
+
+    const text = 'Scopri il programma e gli eventi:';
+    const wa = document.getElementById('btn-share-wa');
+    const ig = document.getElementById('btn-share-ig');
+    const fb = document.getElementById('btn-share-fb');
+    const nat = document.getElementById('btn-share-native');
+    const toast = document.getElementById('copy-toast');
+
+    function openInNew(url){ window.open(url, '_blank', 'noopener'); }
+    function copyLink(){
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(SITE_URL).then(()=>{
+          if (toast) { toast.classList.remove('hidden'); setTimeout(()=>toast.classList.add('hidden'), 1800); }
+        });
+      }
+    }
+
+    if (wa) wa.addEventListener('click', ()=>{
+      openInNew('https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL));
+    });
+    if (fb) fb.addEventListener('click', ()=>{
+      openInNew('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL));
+    });
+    if (ig) ig.addEventListener('click', async ()=>{
+      if (navigator.share) {
+        try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(e){}
+      }
+      await copyLink();
+      openInNew('https://www.instagram.com/');
+    });
+    if (nat) nat.addEventListener('click', async ()=>{
+      if (navigator.share) { try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(e){} }
+      await copyLink();
+    });
+
+    function parseICSDate(v){
+      if (!v) return null;
+      if (v.length === 16 && v.endsWith('Z') && v.indexOf('T') === 8) {
+        return new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8)+'T'+v.slice(9,11)+':'+v.slice(11,13)+':'+v.slice(13,15)+'Z');
+      } else if (v.length === 15 && v.indexOf('T') === 8) {
+        return new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8)+'T'+v.slice(9,11)+':'+v.slice(11,13)+':'+v.slice(13,15));
+      } else if (v.length === 8) {
+        return new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8));
+      }
+      return new Date(v);
+    }
+
+    function parseICS(text){
+      const lines = text.split('
+');
+      const events = [];
+      let ev = null;
+      for (let i=0;i<lines.length;i++){
+        const line = lines[i].trim();
+        if (line === 'BEGIN:VEVENT') { ev = {}; continue; }
+        if (line === 'END:VEVENT') { if (ev) events.push(ev); ev = null; continue; }
+        if (!ev) continue;
+        const idx = line.indexOf(':');
+        if (idx === -1) continue;
+        const key = line.slice(0, idx).split(';')[0].toUpperCase();
+        const val = line.slice(idx+1);
+        if (key === 'DTSTART') ev.start = parseICSDate(val);
+        else if (key === 'DTEND') ev.end = parseICSDate(val);
+        else if (key === 'SUMMARY') ev.summary = val;
+        else if (key === 'LOCATION') ev.location = val;
+        else if (key === 'DESCRIPTION') ev.description = val;
+      }
+      return events;
+    }
+
+    async function loadEvents(){
+      const wrap = document.getElementById('events-list');
+      if (!wrap) return;
+      try {
+        const res = await fetch(ICS_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error('ICS non trovato');
+        const text = await res.text();
+        const events = parseICS(text);
+        const now = new Date();
+        const upcoming = events.filter(e => e.start && (e.start >= now || (e.end && e.end >= now))).sort((a,b) => a.start - b.start).slice(0,3);
+        const fmtDay = new Intl.DateTimeFormat('it-IT', { weekday:'long', day:'2-digit', month:'long' });
+        const fmtTime = new Intl.DateTimeFormat('it-IT', { hour:'2-digit', minute:'2-digit' });
+        wrap.innerHTML = upcoming.length ? '' : '<div class="note">Nessun evento imminente.</div>';
+        upcoming.forEach(e => {
+          const when = e.start ? (fmtDay.format(e.start)+' · '+fmtTime.format(e.start)) : '';
+          const where = e.location ? e.location : '';
+          const card = document.createElement('div');
+          card.className = 'event-card';
+          card.innerHTML = '<div class="event-when">'+when+'</div><div class="event-where">'+where+'</div><div>'+(e.summary||'')+'</div>';
+          wrap.appendChild(card);
+        });
+      } catch (err) {
+        wrap.innerHTML = '<div class="note">Collega un file <code>events.ics</code> pubblico per mostrare gli eventi.</div>';
+      }
+    }
+    loadEvents();
+  </script>
 </body>
 </html>
