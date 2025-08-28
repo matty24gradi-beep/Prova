@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#111827" />
   <meta property="og:title" content="Il tuo hub" />
   <meta property="og:description" content="Tutti i link e i documenti in un posto solo." />
+
   <style>
     :root {
       --bg1: #0ea5e9; /* cyan-500 */
@@ -25,11 +26,19 @@
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
       color: var(--text);
-      background: linear-gradient(120deg, var(--bg1), var(--bg2));
-      background-attachment: fixed;
+      /* ▼▼▼ NUOVO SFONDO da Canva ▼▼▼ */
+      background: url("./assets/bg-desktop.webp") no-repeat center center fixed;
+      background-size: cover;
       display: grid; place-items: center;
       padding: 24px;
     }
+    @media (max-width: 640px){
+      body {
+        background: url("./assets/bg-mobile.webp") no-repeat center center fixed;
+        background-size: cover;
+      }
+    }
+
     .container {
       width: 100%; max-width: 760px;
       background: var(--card-bg);
@@ -280,3 +289,60 @@
         .replace(/\\;/g, ';');
     }
 
+    // === Carica e mostra gli eventi dall'ICS (se presente) ===
+    async function loadICS(){
+      try{
+        const res = await fetch(ICS_URL, { cache: 'no-cache' });
+        if(!res.ok) return; // nessun ICS
+        const raw = await res.text();
+        const text = unfoldICS(raw);
+        const events = [];
+        let current = null;
+        for(const line of text.split(/\n+/)){
+          if(line.startsWith('BEGIN:VEVENT')){ current = {}; continue; }
+          if(line.startsWith('END:VEVENT')){ if(current) events.push(current); current = null; continue; }
+          if(!current) continue;
+          const idx = line.indexOf(':');
+          if(idx === -1) continue;
+          const key = line.slice(0, idx).toUpperCase();
+          const val = line.slice(idx+1);
+          if(key.startsWith('DTSTART')) current.dtstart = parseICSDate(val);
+          else if(key.startsWith('DTEND')) current.dtend = parseICSDate(val);
+          else if(key === 'SUMMARY') current.summary = unescapeICS(val);
+          else if(key === 'LOCATION') current.location = unescapeICS(val);
+          else if(key === 'DESCRIPTION') current.description = unescapeICS(val);
+        }
+        renderEvents(events);
+      }catch(err){ /* silenzio: ICS opzionale */ }
+    }
+
+    function renderEvents(events){
+      const wrap = document.getElementById('events-list');
+      if(!wrap) return;
+      wrap.innerHTML = '';
+      if(!events || !events.length){
+        wrap.innerHTML = '<p class="note">Nessun evento imminente.</p>';
+        return;
+      }
+      const fmtDay = new Intl.DateTimeFormat('it-IT', { weekday:'long', day:'2-digit', month:'long' });
+      const fmtTime = new Intl.DateTimeFormat('it-IT', { hour:'2-digit', minute:'2-digit' });
+
+      events.sort((a,b)=> (a.dtstart||0) - (b.dtstart||0));
+      for(const ev of events){
+        const when = ev.dtstart ? `${fmtDay.format(ev.dtstart)} · ${fmtTime.format(ev.dtstart)}` : '';
+        const where = ev.location || '';
+        const div = document.createElement('div');
+        div.className = 'event-card';
+        div.innerHTML = `
+          <div class="event-when">${when}</div>
+          <div class="event-where">${where}</div>
+          <div class="event-title">${ev.summary ? ev.summary : ''}</div>
+        `;
+        wrap.appendChild(div);
+      }
+    }
+
+    loadICS();
+  </script>
+</body>
+</html>
