@@ -31,17 +31,17 @@
       font-weight: 400; /* default: normale */
       color: var(--text);
       /* ▼▼▼ NUOVO SFONDO da Canva ▼▼▼ */
-        background: url("https://votagemelli.github.io/links/assets/bg-desktop.webp?v=2") no-repeat center center fixed;
-  background-size: cover;
+      background: url("https://votagemelli.github.io/links/assets/bg-desktop.webp?v=6") no-repeat center center fixed;
+      background-size: cover;
       display: grid; place-items: center;
       padding: 24px;
+     }
+     @media (max-width: 640px){
+     body {
+     background: url("https://votagemelli.github.io/links/assets/bg-mobile.webp?v=6") no-repeat center center fixed;
+     background-size: cover;
     }
-    @media (max-width: 640px){
-      body {
-            background: url("https://votagemelli.github.io/links/assets/bg-mobile.webp?v=2") no-repeat center center fixed;
-    background-size: cover;
-      }
-    }
+}
 
     .container {
       width: 100%; max-width: 760px;
@@ -122,7 +122,7 @@
 <body>
   <main class="container" role="main">
     <header>
-      <img id="avatar-img" class="avatar" src="https://votagemelli.github.io/links/assets/claudio.jpg?v=2" alt="Claudio Gemelli" onerror="this.style.display='none';document.getElementById('avatar-fallback').classList.remove('hidden')" />
+      <img id="avatar-img" class="avatar" src="https://votagemelli.github.io/links/assets/claudio.jpg?v=6" alt="Claudio Gemelli" onerror="this.style.display='none';document.getElementById('avatar-fallback').classList.remove('hidden')" />
       <div id="avatar-fallback" class="avatar hidden" aria-hidden="true">CG</div>
       <div>
         <h1>CLAUDIO GEMELLI</h1>
