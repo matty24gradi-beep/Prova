@@ -31,15 +31,13 @@
       font-weight: 400; /* default: normale */
       color: var(--text);
       /* ▼▼▼ NUOVO SFONDO da Canva ▼▼▼ */
-      background: url("./assets/bg-desktop.webp") no-repeat center center fixed;
+      background: linear-gradient(120deg, var(--bg1), var(--bg2));
       background-size: cover;
       display: grid; place-items: center;
       padding: 24px;
     }
     @media (max-width: 640px){
       body {
-        background: url("./assets/bg-mobile.webp") no-repeat center center fixed;
-        background-size: cover;
       }
     }
 
@@ -357,5 +355,48 @@
 
     loadICS();
   </script>
+  <script>
+/* Prova automaticamente più percorsi per le immagini e applica il primo che funziona */
+(async () => {
+  async function firstOK(urls){
+    for (const u of urls){
+      try {
+        const r = await fetch(u, { method: 'HEAD', cache: 'no-cache' });
+        if (r.ok) return u;
+      } catch(_) {}
+    }
+    return null;
+  }
+
+  const base = location.href;
+  const candidatesDesktop = [
+    './assets/bg-desktop.webp',
+    'assets/bg-desktop.webp',
+    new URL('assets/bg-desktop.webp', base).href
+  ];
+  const candidatesMobile = [
+    './assets/bg-mobile.webp',
+    'assets/bg-mobile.webp',
+    new URL('assets/bg-mobile.webp', base).href
+  ];
+
+  const desktopURL = await firstOK(candidatesDesktop);
+  const mobileURL  = await firstOK(candidatesMobile);
+
+  if (desktopURL){
+    const applyBg = (useMobile) => {
+      const url = (useMobile && mobileURL) ? mobileURL : desktopURL;
+      document.body.style.backgroundImage = `url('${url}')`;
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundPosition = 'center center';
+      document.body.style.backgroundAttachment = 'fixed';
+      document.body.style.backgroundSize = 'cover';
+    };
+    const mq = window.matchMedia('(max-width: 640px)');
+    applyBg(mq.matches);
+    mq.addEventListener?.('change', (e)=> applyBg(e.matches));
+  }
+})();
+</script>
 </body>
 </html>
