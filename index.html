@@ -100,7 +100,8 @@
 <body>
   <main class="container" role="main">
     <header>
-      <img class="avatar" src="./assets/claudio.jpg" alt="Claudio Gemelli" />
+      <img id="avatar-img" class="avatar" src="https://votagemelli.github.io/links/assets/claudio.jpg?v=1" alt="Claudio Gemelli" onerror="this.style.display='none';document.getElementById('avatar-fallback').classList.remove('hidden')" />
+      <div id="avatar-fallback" class="avatar hidden" aria-hidden="true">CG</div>
       <div>
         <h1>CLAUDIO GEMELLI</h1>
         <p class="subtitle">Ecco tutte le informazioni utili per seguire la campagna elettorale</p>
@@ -143,9 +144,9 @@
     <section class="section" aria-labelledby="share-title">
       <h2 id="share-title">Condividi</h2>
       <div class="share" role="group" aria-label="Azioni di condivisione">
-        <button id="btn-share-wa" class="btn" type="button" aria-label="Condividi su WhatsApp">WhatsApp</button>
-        <button id="btn-share-fb" class="btn" type="button" aria-label="Condividi su Facebook">Facebook</button>
-        <button id="btn-share-ig" class="btn" type="button" aria-label="Condividi su Instagram">Instagram</button>
+        <a id="share-wa" class="btn" href="#" target="_blank" rel="noopener" aria-label="Condividi su WhatsApp">WhatsApp</a>
+        <a id="share-fb" class="btn" href="#" target="_blank" rel="noopener" aria-label="Condividi su Facebook">Facebook</a>
+        <a id="share-ig" class="btn" href="#" target="_blank" rel="noopener" aria-label="Condividi su Instagram">Instagram</a>
         <button id="btn-share-native" class="btn" type="button" aria-label="Condividi">Condividi</button>
       </div>
       <div id="copy-toast" class="toast hidden" role="status" aria-live="polite">Link copiato negli appunti ✅</div>
@@ -196,37 +197,58 @@
 
     // === Share buttons ===
     const text = 'Scopri il programma e gli eventi:';
-    const wa = document.getElementById('btn-share-wa');
-    const ig = document.getElementById('btn-share-ig');
-    const fb = document.getElementById('btn-share-fb');
+    const aWa = document.getElementById('share-wa');
+    const aFb = document.getElementById('share-fb');
+    const aIg = document.getElementById('share-ig');
     const nat = document.getElementById('btn-share-native');
     const toast = document.getElementById('copy-toast');
 
-    function openInNew(url){ window.open(url, '_blank', 'noopener'); }
+    // Prepara gli href per i servizi di condivisione
+    const waHref = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL);
+    const fbHref = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL);
+    const igHref = 'https://www.instagram.com/'; // Instagram non supporta share URL con testo precompilato
+
+    if (aWa) aWa.setAttribute('href', waHref);
+    if (aFb) aFb.setAttribute('href', fbHref);
+    if (aIg) aIg.setAttribute('href', igHref);
+
     function copyLink(){
       if (navigator.clipboard && navigator.clipboard.writeText) {
         return navigator.clipboard.writeText(SITE_URL).then(()=>{
           if (toast) { toast.classList.remove('hidden'); setTimeout(()=>toast.classList.add('hidden'), 1800); }
         });
       }
+      const tmp = document.createElement('input');
+      tmp.value = SITE_URL;
+      document.body.appendChild(tmp);
+      tmp.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(tmp);
+      if (toast) { toast.classList.remove('hidden'); setTimeout(()=>toast.classList.add('hidden'), 1800); }
       return Promise.resolve();
     }
 
-    if (wa) wa.addEventListener('click', ()=>{
-      openInNew('https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL));
+    // Instagram: prova condivisione nativa, altrimenti copia link e apri Instagram
+    if (aIg) aIg.addEventListener('click', async (e)=>{
+      if (navigator.share) {
+        e.preventDefault();
+        try {
+          await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL });
+          return;
+        } catch (err) { /* fallback sotto */ }
+      }
+      // fallback: copia e poi apri Instagram in nuova scheda
+      e.preventDefault();
+      await copyLink();
+      const w = window.open(igHref, '_blank');
+      if (w) w.opener = null;
     });
-    if (fb) fb.addEventListener('click', ()=>{
-      openInNew('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL));
-    });
-    if (ig) ig.addEventListener('click', async ()=>{
+
+    // Pulsante generico nativo
+    if (nat) nat.addEventListener('click', async ()=>{
       if (navigator.share) {
         try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(e){}
       }
-      await copyLink();
-      openInNew('https://www.instagram.com/');
-    });
-    if (nat) nat.addEventListener('click', async ()=>{
-      if (navigator.share) { try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(e){} }
       await copyLink();
     });
 
@@ -258,6 +280,3 @@
         .replace(/\\;/g, ';');
     }
 
-
-</body>
-</html>
