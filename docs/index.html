@@ -4,22 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Claudio Gemelli — hub</title>
-  <meta name="description" content="Link, documenti ed eventi — layout full screen pulito in stile Apple." />
+  <meta name="description" content="Link e contatti della campagna elettorale." />
   <meta name="theme-color" content="#0b0b0b" />
   <meta property="og:title" content="Claudio Gemelli — hub" />
-  <meta property="og:description" content="Tutti i link e i documenti in un posto solo." />
+  <meta property="og:description" content="Tutti i link e i contatti in un unico posto." />
 
   <!-- CSS principale locale -->
-  <link rel="stylesheet" href="./style.css?v=10">
+  <link rel="stylesheet" href="./style.css?v=11">
 
   <style>
     /* ===== Sfondo full screen come layer fisso (docs/assets/) ===== */
     .page-bg{
       position: fixed; inset: 0; z-index: -1;
-      background: url("./assets/bg-mobile.webp?v=10") center center / cover no-repeat;
+      background: url("./assets/bg-mobile.webp?v=11") center center / cover no-repeat;
     }
     @media (min-width: 641px){
-      .page-bg{ background-image: url("./assets/bg-desktop.webp?v=10"); }
+      .page-bg{ background-image: url("./assets/bg-desktop.webp?v=11"); }
     }
 
     /* ===== Layout 2 colonne ===== */
@@ -53,7 +53,7 @@
       .profile{ position:static; max-width: 240px; }
     }
 
-    /* Bottoni share circolari */
+    /* Bottoni share circolari (PNG locali) */
     .quick-share{
       display:flex; gap:10px; flex-wrap:wrap;
     }
@@ -65,7 +65,7 @@
       transition: background .2s ease, border-color .2s ease, transform .06s ease;
     }
     .qs-btn:hover{ background: rgba(255,255,255,.94); border-color: rgba(0,0,0,.12); transform: translateY(-1px); }
-    .qs-btn svg{ width:22px; height:22px; display:block; }
+    .qs-btn img, .qs-btn svg{ width:22px; height:22px; display:block; }
 
     @media (prefers-color-scheme: dark){
       .qs-btn{ background: rgba(16,16,16,.86); }
@@ -73,7 +73,7 @@
       .profile img{ border-color:#2b2b2b; }
     }
 
-    /* ===== Colonna destra: contenuti piatti ===== */
+    /* ===== Colonna destra ===== */
     .content{ display:grid; gap: clamp(18px, 3vw, 28px); }
     .headline h1{
       margin:0 0 6px; font-weight:700;
@@ -117,14 +117,12 @@
   <!-- Sfondo fisso full-screen -->
   <div class="page-bg" aria-hidden="true"></div>
 
-  <!-- Navbar vetrosa minima -->
+  <!-- Navbar (solo Social per ora) -->
   <header class="site-header nav">
     <div class="inner" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
       <span class="brand" style="font-weight:700">Claudio Gemelli</span>
       <nav style="display:flex;gap:12px;">
         <a href="#social">Social</a>
-        <a href="#docs">Documenti</a>
-        <a href="#events">Eventi</a>
       </nav>
     </div>
   </header>
@@ -132,49 +130,22 @@
   <div class="wrap-page">
     <!-- SINISTRA: immagine + share -->
     <aside class="profile">
-      <img src="./assets/claudio.jpg?v=10" alt="Claudio Gemelli">
+      <img src="./assets/claudio.jpg?v=11" alt="Claudio Gemelli">
 
-      <!-- Bottoni circolari con icone inline (nessuna dipendenza esterna) -->
+      <!-- Bottoni circolari (PNG locali + aeroplanino inline) -->
       <div class="quick-share" role="group" aria-label="Condividi">
         <!-- WhatsApp -->
         <a id="qs-wa" class="qs-btn" href="#" target="_blank" rel="noopener" aria-label="WhatsApp" title="Condividi su WhatsApp">
-          <!-- Logo ufficiale WhatsApp (verde 25D366) -->
-          <svg viewBox="0 0 256 256" aria-hidden="true">
-            <path fill="#25D366" d="M36.4 219.6A127.9 127.9 0 1 1 219.6 36.4 127.9 127.9 0 0 1 36.4 219.6Z"/>
-            <path fill="#FFF" d="M190.8 163.6c-2.4 6.9-11.8 12.7-19 14.4c-5.1 1.2-11.7 2.2-34.1-7.3c-28.6-12.3-47-42.6-48.4-44.5s-11.6-15.4-11.6-29.3s7.1-20.7 9.6-23.5a20.2 20.2 0 0 1 14.5-6.7c3.5 0 6.6 0 9.5.2s7.1-1.2 10.9 8.4c2.4 5.9 5.1 11.4 5.5 12.2s.7 1.8.1 2.9s-.9 1.8-1.8 2.9s-1.8 2.1-2.7 3.2c-.9 1.1-1.8 2.1-2.7 3.5s-1.9 3.1-.8 5s4.7 7.8 10.1 12.7c6.9 6.2 12.8 8.1 15 9.1s3.9.8 5.4-.5s6.2-7.2 7.9-9.6s3.3-2 5.4-1.2s14.1 6.7 16.5 7.9s4 1.8 4.6 2.8a20.5 20.5 0 0 1-1.4 11.6Z"/>
-            <path fill="#FFF" d="M69.9 199.3l6.8-25.1a84.4 84.4 0 1 1 31.1 30l-27.9 4.9Z"/>
-            <path fill="#25D366" d="M98.3 193.5a73.6 73.6 0 1 0-26.8-26l-3.9 14.6l15.3-2.7l15.4-2.9Z"/>
-          </svg>
+          <img src="./assets/whatsapp.png?v=11" alt="" aria-hidden="true">
         </a>
-
         <!-- Facebook -->
         <a id="qs-fb" class="qs-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Condividi su Facebook">
-          <!-- Logo ufficiale Facebook (blu 1877F2) -->
-          <svg viewBox="0 0 256 256" aria-hidden="true">
-            <rect width="256" height="256" rx="56" fill="#1877F2"/>
-            <path fill="#FFF" d="M173 73h-20c-22.1 0-36.9 14.7-36.9 37.4v16.5H99v27.5h17.1V213h29v-58.6h19.6l3-27.5H145v-14.2c0-8 2-12.1 12.6-12.1H173V73z"/>
-          </svg>
+          <img src="./assets/facebook.png?v=11" alt="" aria-hidden="true">
         </a>
-
         <!-- Instagram -->
         <a id="qs-ig" class="qs-btn" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" title="Apri Instagram">
-          <!-- Logo ufficiale Instagram con gradiente -->
-          <svg viewBox="0 0 256 256" aria-hidden="true">
-            <defs>
-              <linearGradient id="igGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#F58529"/>
-                <stop offset="30%" stop-color="#FEDA77"/>
-                <stop offset="60%" stop-color="#DD2A7B"/>
-                <stop offset="100%" stop-color="#8134AF"/>
-              </linearGradient>
-            </defs>
-            <rect x="24" y="24" width="208" height="208" rx="48" fill="url(#igGrad)"/>
-            <circle cx="176" cy="80" r="16" fill="#FFF"/>
-            <circle cx="128" cy="128" r="48" fill="none" stroke="#FFF" stroke-width="24"/>
-            <rect x="24" y="24" width="208" height="208" rx="48" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="12"/>
-          </svg>
+          <img src="./assets/instagram.png?v=11" alt="" aria-hidden="true">
         </a>
-
         <!-- Condivisione generale (aeroplanino) -->
         <button id="qs-share" class="qs-btn" type="button" aria-label="Condividi" title="Condividi">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
@@ -188,7 +159,7 @@
     <section class="content">
       <div class="headline">
         <h1>CLAUDIO GEMELLI</h1>
-        <p class="lead">Tutti i link utili, documenti ed eventi — in chiaro, senza scatole pesanti.</p>
+        <p class="lead">Ecco tutte le informazioni utili per seguire la campagna elettorale verso le elezioni regionali del 12 e 13 ottobre in Toscana</p>
       </div>
 
       <!-- Social -->
@@ -196,21 +167,7 @@
         <h2 class="section-title">Social</h2>
         <div class="tiles">
           <a class="tile" href="https://www.instagram.com/claudio.gemelli.fdi/" target="_blank" rel="noopener">
-            <!-- icona Instagram inline -->
-            <svg viewBox="0 0 256 256" aria-hidden="true">
-              <defs>
-                <linearGradient id="igGrad2" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#F58529"/>
-                  <stop offset="30%" stop-color="#FEDA77"/>
-                  <stop offset="60%" stop-color="#DD2A7B"/>
-                  <stop offset="100%" stop-color="#8134AF"/>
-                </linearGradient>
-              </defs>
-              <rect x="24" y="24" width="208" height="208" rx="48" fill="url(#igGrad2)"/>
-              <circle cx="176" cy="80" r="16" fill="#FFF"/>
-              <circle cx="128" cy="128" r="48" fill="none" stroke="#FFF" stroke-width="24"/>
-              <rect x="24" y="24" width="208" height="208" rx="48" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="12"/>
-            </svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
             <div>
               <div class="t-title">Instagram</div>
               <div class="t-desc">@claudio.gemelli.fdi</div>
@@ -218,11 +175,7 @@
           </a>
 
           <a class="tile" href="https://www.facebook.com/share/15F4udkWZwo/?mibextid=wwXIfr" target="_blank" rel="noopener">
-            <!-- icona Facebook inline -->
-            <svg viewBox="0 0 256 256" aria-hidden="true">
-              <rect width="256" height="256" rx="56" fill="#1877F2"/>
-              <path fill="#FFF" d="M173 73h-20c-22.1 0-36.9 14.7-36.9 37.4v16.5H99v27.5h17.1V213h29v-58.6h19.6l3-27.5H145v-14.2c0-8 2-12.1 12.6-12.1H173V73z"/>
-            </svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M13.5 22v-8.2H16l.4-3.2h-2.9V8.3c0-.9.3-1.6 1.6-1.6h1.8V3.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H8v3.2h2.3V22h3.2Z"/></svg>
             <div>
               <div class="t-title">Facebook</div>
               <div class="t-desc">@claudio.gemelli.fdi</div>
@@ -231,22 +184,25 @@
         </div>
       </div>
 
-      <!-- Documenti -->
-      <div id="docs" class="section-block">
-        <h2 class="section-title">Documenti</h2>
-        <div id="docs-list" class="tiles">
-          <!-- Esempio:
-          <a class="tile" href="./assets/programma.pdf" target="_blank" rel="noopener">
-            <span aria-hidden="true">📄</span> Programma
-          </a> -->
+      <!-- Extra: Modulo contatti + Calendario appuntamenti -->
+      <div id="extra" class="section-block">
+        <h2 class="section-title">Extra</h2>
+        <div class="tiles">
+          <a class="tile" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            <div>
+              <div class="t-title">Modulo contatti</div>
+              <div class="t-desc">Collega un Google Form o Typeform</div>
+            </div>
+          </a>
+          <a class="tile" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <div>
+              <div class="t-title">Calendario appuntamenti</div>
+              <div class="t-desc">Linka Calendly o Google Calendar</div>
+            </div>
+          </a>
         </div>
-      </div>
-
-      <!-- Eventi -->
-      <div id="events" class="section-block">
-        <h2 class="section-title">Eventi</h2>
-        <div id="events-list" class="tiles"></div>
-        <p class="muted"><a href="./events.ics" download>Scarica calendario (.ics)</a></p>
       </div>
 
       <p class="muted">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></p>
@@ -254,7 +210,7 @@
   </div>
 
   <script>
-    // Condivisione veloce (nessuna dipendenza esterna)
+    // Condivisione veloce
     const SITE_URL = (typeof window !== 'undefined' && window.location && window.location.href) ? window.location.href : '';
     const text = 'Scopri il programma e gli eventi:';
     const qsWa = document.getElementById('qs-wa');
@@ -270,57 +226,8 @@
       }
       try { await navigator.clipboard.writeText(SITE_URL); } catch(_){}
     });
-
-    // Eventi da ICS (docs/events.ics)
-    const ICS_URL = './events.ics';
-    async function loadICS(){
-      try{
-        const res = await fetch(ICS_URL, { cache: 'no-cache' });
-        if(!res.ok) return;
-        const raw = await res.text();
-        const text = raw.replace(/\r\n/g, '\n').replace(/\n[\t ]/g, '');
-        const events = [];
-        let ev = null;
-        for(const line of text.split(/\n+/)){
-          if(line.startsWith('BEGIN:VEVENT')){ ev = {}; continue; }
-          if(line.startsWith('END:VEVENT')){ if(ev) events.push(ev); ev = null; continue; }
-          if(!ev) continue;
-          const i = line.indexOf(':'); if(i === -1) continue;
-          const key = line.slice(0, i).toUpperCase();
-          const val = line.slice(i+1);
-          const parseDate = v => v && (v.length===16&&v.endsWith('Z')&&v.indexOf('T')===8
-            ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8)+'T'+v.slice(9,11)+':'+v.slice(11,13)+':'+v.slice(13,15)+'Z')
-            : v.length===15&&v.indexOf('T')===8
-              ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8)+'T'+v.slice(9,11)+':'+v.slice(11,13)+':'+v.slice(13,15))
-              : v.length===8 ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8))
-              : new Date(v));
-          if(key.startsWith('DTSTART')) ev.dtstart = parseDate(val);
-          else if(key.startsWith('DTEND')) ev.dtend = parseDate(val);
-          else if(key === 'SUMMARY') ev.summary = String(val).replace(/\\n/g,'\n').replace(/\\,/g,',').replace(/\\;/g,';');
-          else if(key === 'LOCATION') ev.location = String(val).replace(/\\n/g,'\n').replace(/\\,/g,',').replace(/\\;/g,';');
-        }
-        const wrap = document.getElementById('events-list');
-        if(!wrap) return;
-        wrap.innerHTML = '';
-        if(!events.length){
-          wrap.innerHTML = '<div class="tile" style="pointer-events:none">Nessun evento imminente</div>';
-          return;
-        }
-        const fmtDay = new Intl.DateTimeFormat('it-IT', { weekday:'long', day:'2-digit', month:'long' });
-        const fmtTime = new Intl.DateTimeFormat('it-IT', { hour:'2-digit', minute:'2-digit' });
-        events.sort((a,b)=> (a.dtstart||0) - (b.dtstart||0));
-        for(const e of events){
-          const when = e.dtstart ? `${fmtDay.format(e.dtstart)} · ${fmtTime.format(e.dtstart)}` : '';
-          const where = e.location || '';
-          const div = document.createElement('div');
-          div.className = 'tile';
-          div.innerHTML = `<strong>${when}</strong><span style="color:var(--muted)">${where}</span>`;
-          wrap.appendChild(div);
-        }
-      }catch(_){}
-    }
-    loadICS();
   </script>
 </body>
 </html>
+
 
