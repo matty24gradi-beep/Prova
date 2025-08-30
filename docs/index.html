@@ -3,191 +3,217 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Il tuo hub – link, social e documenti</title>
-  <meta name="description" content="Una semplice pagina link-in-bio per raccogliere social, documenti scaricabili e contatti." />
-  <meta name="theme-color" content="#111827" />
-  <meta property="og:title" content="Il tuo hub" />
+  <title>Claudio Gemelli — hub</title>
+  <meta name="description" content="Link, documenti ed eventi — layout full screen pulito in stile Apple." />
+  <meta name="theme-color" content="#0b0b0b" />
+  <meta property="og:title" content="Claudio Gemelli — hub" />
   <meta property="og:description" content="Tutti i link e i documenti in un posto solo." />
 
-  <!-- CSS principale (il tuo Apple-style) -->
-  <link rel="stylesheet" href="./style.css?v=6">
-
-  <!-- Montserrat (ok per i testi dentro le card) -->
+  <!-- CSS principale già creato -->
+  <link rel="stylesheet" href="./style.css?v=7">
+  <!-- Montserrat solo per testi (ok) -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Stili minimi locali (solo piccoli tocchi, il grosso è in style.css) -->
+  <!-- Stili mirati per il nuovo layout (nessuna ombra) -->
   <style>
-    :root{
-      --card-bg: rgba(255,255,255,0.92);
-      --ring: rgba(14,165,233,0.45);
-      --border: rgba(15,23,42,0.08);
+    /* ===== Sfondo full screen come layer fisso ===== */
+    .page-bg{
+      position: fixed; inset: 0; z-index: -1;
+      background: url("./assets/bg-mobile.webp?v=7") center center / cover no-repeat;
+    }
+    @media (min-width: 641px){
+      .page-bg{ background-image: url("./assets/bg-desktop.webp?v=7"); }
     }
 
-    /* Tipografia della card con Montserrat */
-    .container, .link-btn, .doc-item, .event-card, .btn, .subtitle, .note {
-      font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    /* ===== Layout a due colonne (foto sinistra, contenuti destra) ===== */
+    body{
+      margin:0; min-height:100svh; color:var(--fg);
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      display:block; /* niente grid centrale: pagina “libera” */
+    }
+    .wrap-page{
+      max-width:var(--container);
+      margin:0 auto;
+      padding: clamp(16px, 4vw, 40px) 20px;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap: clamp(18px, 4vw, 40px);
+      align-items:start;
+    }
+    @media (max-width: 880px){
+      .wrap-page{ grid-template-columns: 1fr; }
     }
 
-    /* Card centrale (riuso del tuo stile) */
-    .container {
-      width: 100%; max-width: 760px;
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-      border-radius: 24px;
-      padding: 28px;
-      margin-top: 24px;
+    /* ===== Colonna sinistra: immagine fissa/“ancorata” ===== */
+    .profile{
+      position:sticky; top: clamp(12px, 3vw, 28px);
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .profile img{
+      width:100%; max-width:320px; height:auto; display:block; border-radius: var(--radius-lg);
+      object-fit:cover; border:1px solid var(--line);
+      box-shadow:none; /* no ombre */
+    }
+    @media (max-width:880px){
+      .profile{ position:static; max-width: 220px; }
     }
 
-    header.card-head { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
-    .avatar {
-      width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
-      background: radial-gradient(circle at 30% 30%, #fff, #dbeafe); border: 2px solid var(--border);
-      display: grid; place-items: center; font-weight: 700; color: #1e293b;
+    /* ===== Colonna destra: contenuti ordinati, zero ombre ===== */
+    .content{ display:grid; gap: clamp(16px, 2.6vw, 24px); }
+    .headline h1{
+      margin:0 0 6px; font-weight:700;
+      font-size: clamp(28px, 3.8vw, 44px); letter-spacing:-0.02em;
     }
-    .links { display: grid; gap: 10px; }
-    .link-btn {
-      display: flex; align-items: center; gap: 12px; text-decoration: none;
-      padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border);
-      background: #fff; color: #0f172a; transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    .headline .lead{ margin:0; color:var(--muted); }
+
+    /* Sezioni – nessuna “card”, solo titoli e blocchi separati */
+    .section-block{ display:grid; gap:12px; }
+    .section-title{
+      margin:0; font-size: var(--fs-1); font-weight:700; letter-spacing:.02em; text-transform: uppercase;
     }
-    .link-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); border-color: var(--ring); }
-    .link-title { font-weight: 600; }
-    .link-desc { color: #475569; font-size: .92rem; }
 
-    .docs { display: grid; gap: 8px; }
-    .doc-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #fff; border: 1px solid var(--border); border-radius: 12px; }
-    .doc-icon { width: 22px; height: 22px; }
-
-    .events { display: grid; gap: 10px; }
-    .event-card { background:#fff; border:1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
-    .share { display:flex; gap:8px; flex-wrap:wrap; }
-    .btn {
-      display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px;
-      background:#111827; color:#fff; border:1px solid rgba(255,255,255,.08); text-decoration:none;
-      box-shadow: 0 2px 10px rgba(0,0,0,.08); font-weight: 600;
+    /* ===== Pulsanti separati stile Apple: bordi sottili, hover delicato, no ombra ===== */
+    .tiles{ display:grid; gap:10px; }
+    .tile{
+      display:flex; align-items:center; gap:12px; text-decoration:none;
+      padding:14px 16px; border-radius:14px;
+      background: rgba(255,255,255,.86);
+      border:1px solid var(--line);
+      color: var(--fg);
+      box-shadow:none; /* no ombre */
+      transition: background .2s ease, border-color .2s ease, transform .06s ease;
+      -webkit-backdrop-filter: saturate(140%) blur(6px); backdrop-filter: saturate(140%) blur(6px);
     }
-    .btn:focus { outline: 3px solid var(--ring); outline-offset: 2px; }
-    footer.page-foot { margin: 26px 0 0; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
-    .badge { font-size: .82rem; color: #0ea5e9; background: #e0f2fe; border: 1px solid #bae6fd; padding: 4px 10px; border-radius: 999px; }
+    .tile:hover{ background: rgba(255,255,255,.94); border-color: rgba(0,0,0,.12); transform: translateY(-1px); }
+    .tile:active{ transform: translateY(0); }
+    .tile svg{ width:22px; height:22px; flex:0 0 22px; }
+    .tile .t-title{ font-weight:600; }
+    .tile .t-desc{ color:var(--muted); font-size:.92rem; }
 
-    /* Spaziatura sezione contenuti dopo l'hero */
-    .section { padding: 48px 0; }
-    @media (max-width: 880px){ .section { padding: 36px 0; } }
+    /* Documenti / Eventi stessi tile “flat” */
+    .item{
+      display:flex; align-items:center; gap:10px;
+      padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.86); border:1px solid var(--line);
+      text-decoration:none; color:var(--fg);
+    }
+
+    /* Footer leggero */
+    .foot{ color:var(--muted); font-size:.92rem; }
+
+    /* Dark mode coerente con il tuo style.css */
+    @media (prefers-color-scheme: dark){
+      .tile, .item{ background:rgba(16,16,16,.86); }
+      .tile:hover{ background:rgba(16,16,16,.94); border-color:rgba(255,255,255,.12); }
+      .profile img{ border-color:#2b2b2b; }
+    }
   </style>
 </head>
 <body>
+  <!-- Sfondo fisso full-screen -->
+  <div class="page-bg" aria-hidden="true"></div>
 
-  <!-- NAVBAR vetrosa (già stilata in style.css) -->
+  <!-- Navbar vetrosa minimale (opzionale, resta pulita) -->
   <header class="site-header nav">
     <div class="inner" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
-      <a href="#" class="brand" style="font-weight:700;text-decoration:none;">Claudio Gemelli</a>
-      <nav style="display:flex;gap:12px;align-items:center;">
+      <span class="brand" style="font-weight:700">Claudio Gemelli</span>
+      <nav style="display:flex;gap:12px;">
         <a href="#social">Social</a>
-        <a href="#docs-title">Documenti</a>
-        <a href="#events-title">Eventi</a>
+        <a href="#docs">Documenti</a>
+        <a href="#events">Eventi</a>
       </nav>
     </div>
   </header>
 
-  <!-- HERO full-bleed in stile Apple (usa i tuoi bg) -->
-  <section class="section-hero hero">
-    <picture class="hero-bg">
-      <source media="(max-width: 767px)" srcset="./assets/bg-mobile.webp?v=6">
-      <source media="(min-width: 768px)" srcset="./assets/bg-desktop.webp?v=6">
-      <img class="bg" src="./assets/bg-desktop.webp?v=6" alt="" aria-hidden="true">
-    </picture>
+  <div class="wrap-page">
+    <!-- SINISTRA: immagine -->
+    <aside class="profile">
+      <img src="./assets/claudio.jpg" alt="Claudio Gemelli">
+    </aside>
 
-    <div class="content hero__content inner">
-      <p class="kicker">Campagna 2025</p>
-      <h1 class="display">Semplice. Pulito. <span style="white-space:nowrap">Di classe.</span></h1>
-      <p class="lead">Tutti i link, i documenti e gli eventi in un'unica pagina chiara.</p>
-      <div class="hero-ctas" style="display:flex;gap:12px;flex-wrap:wrap">
-        <a class="btn btn--accent" href="#social">Vai ai link</a>
-        <a class="btn btn--ghost" href="#events-title">Eventi</a>
+    <!-- DESTRA: contenuti a tutta pagina, pulsanti separati -->
+    <section class="content">
+      <div class="headline">
+        <h1>CLAUDIO GEMELLI</h1>
+        <p class="lead">Tutti i link utili, documenti ed eventi — in chiaro, senza scatole pesanti.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- CONTENUTI: la tua card “link-in-bio” sotto all’hero -->
-  <section class="section">
-    <div class="inner">
-      <main class="container" role="main">
-        <header class="card-head">
-          <img id="avatar-img" class="avatar" src="./assets/claudio.jpg" alt="Claudio Gemelli"
-               onerror="this.style.display='none';document.getElementById('avatar-fallback').classList.remove('hidden')" />
-          <div id="avatar-fallback" class="avatar hidden" aria-hidden="true">CG</div>
-          <div>
-            <h2 style="margin:0 0 4px;font-size:1.25rem;letter-spacing:.01em">CLAUDIO GEMELLI</h2>
-            <p class="subtitle">Ecco tutte le informazioni utili per seguire la campagna elettorale</p>
-            <p class="note">Ultimo aggiornamento: <time id="last-updated" aria-live="polite">—</time></p>
-          </div>
-        </header>
+      <!-- Social -->
+      <div id="social" class="section-block">
+        <h2 class="section-title">Social</h2>
+        <div class="tiles">
+          <a class="tile" href="https://www.instagram.com/claudio.gemelli.fdi/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+            <div>
+              <div class="t-title">Instagram</div>
+              <div class="t-desc">@claudio.gemelli.fdi</div>
+            </div>
+          </a>
 
-        <section class="section" id="social" aria-labelledby="social-title" style="padding-top:24px">
-          <h2 id="social-title">Social</h2>
-          <div class="links">
-            <a class="link-btn" href="https://www.instagram.com/claudio.gemelli.fdi/" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
-              <div>
-                <div class="link-title">Instagram</div>
-                <div class="link-desc">@claudio.gemelli.fdi</div>
-              </div>
-            </a>
-            <a class="link-btn" href="https://www.facebook.com/share/15F4udkWZwo/?mibextid=wwXIfr" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M13.5 22v-8.2H16l.4-3.2h-2.9V8.3c0-.9.3-1.6 1.6-1.6h1.8V3.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H8v3.2h2.3V22h3.2Z"/></svg>
-              <div>
-                <div class="link-title">Facebook</div>
-                <div class="link-desc">@claudio.gemelli.fdi</div>
-              </div>
-            </a>
-          </div>
-          <p class="note">Suggerimento: aggiungi parametri UTM ai link per tracciare il traffico dal QR.</p>
-        </section>
+          <a class="tile" href="https://www.facebook.com/share/15F4udkWZwo/?mibextid=wwXIfr" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M13.5 22v-8.2H16l.4-3.2h-2.9V8.3c0-.9.3-1.6 1.6-1.6h1.8V3.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H8v3.2h2.3V22h3.2Z"/></svg>
+            <div>
+              <div class="t-title">Facebook</div>
+              <div class="t-desc">@claudio.gemelli.fdi</div>
+            </div>
+          </a>
+        </div>
+      </div>
 
-        <section class="section" aria-labelledby="docs-title" style="padding-top:0">
-          <h2 id="docs-title">Documenti</h2>
-          <div class="docs" id="docs-list"></div>
-        </section>
+      <!-- Documenti -->
+      <div id="docs" class="section-block">
+        <h2 class="section-title">Documenti</h2>
+        <div id="docs-list" class="tiles">
+          <!-- Esempio di voce
+          <a class="item" href="./assets/programma.pdf" target="_blank" rel="noopener">
+            <span class="doc-icon" aria-hidden="true">📄</span> Programma
+          </a> -->
+        </div>
+      </div>
 
-        <section class="section" aria-labelledby="events-title" style="padding-top:0">
-          <h2 id="events-title">Eventi</h2>
-          <div id="events-list" class="events"></div>
-          <p class="note"><a href="./events.ics" download>Scarica il calendario (.ics)</a></p>
-        </section>
+      <!-- Eventi -->
+      <div id="events" class="section-block">
+        <h2 class="section-title">Eventi</h2>
+        <div id="events-list" class="tiles"></div>
+        <p class="foot"><a href="./events.ics" download>Scarica calendario (.ics)</a></p>
+      </div>
 
-        <section class="section" aria-labelledby="extra-title" style="padding-top:0">
-          <h2 id="extra-title">Extra</h2>
-          <div class="links">
-            <a class="link-btn" href="#" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-              <div>
-                <div class="link-title">Modulo contatti</div>
-                <div class="link-desc">Collega un Google Form o Typeform</div>
-              </div>
-            </a>
-            <a class="link-btn" href="#" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-              <div>
-                <div class="link-title">Calendario appuntamenti</div>
-                <div class="link-desc">Linka Calendly o Google Calendar</div>
-              </div>
-            </a>
-          </div>
-        </section>
+      <!-- Condividi / Extra -->
+      <div class="section-block">
+        <h2 class="section-title">Condividi</h2>
+        <div class="tiles" role="group" aria-label="Azioni di condivisione">
+          <a id="share-wa" class="tile" href="#" target="_blank" rel="noopener">WhatsApp</a>
+          <a id="share-fb" class="tile" href="#" target="_blank" rel="noopener">Facebook</a>
+          <a id="share-ig" class="tile" href="#" target="_blank" rel="noopener">Instagram</a>
+          <button id="btn-share-native" class="tile" type="button" style="cursor:pointer">Condividi</button>
+        </div>
+      </div>
 
-        <footer class="page-foot">
-          <div class="contact">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></div>
-          <span class="badge">QR-ready</span>
-        </footer>
-      </main>
-    </div>
-  </section>
+      <div class="section-block">
+        <h2 class="section-title">Extra</h2>
+        <div class="tiles">
+          <a class="tile" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            <div>
+              <div class="t-title">Modulo contatti</div>
+              <div class="t-desc">Collega un Google Form o Typeform</div>
+            </div>
+          </a>
+          <a class="tile" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <div>
+              <div class="t-title">Calendario appuntamenti</div>
+              <div class="t-desc">Linka Calendly o Google Calendar</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <p class="foot">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></p>
+    </section>
+  </div>
 
   <script>
-    // Data ultima modifica
+    // Ultimo aggiornamento (se vuoi visualizzarlo, aggiungi un <time id="last-updated"> dove preferisci)
     (function(){
       const t = document.getElementById('last-updated');
       if (!t) return;
@@ -197,16 +223,71 @@
       t.setAttribute('datetime', d.toISOString());
     })();
 
-    // Condivisione
+    // Share base
     const SITE_URL = (typeof window !== 'undefined' && window.location && window.location.href) ? window.location.href : '';
     const text = 'Scopri il programma e gli eventi:';
-    ['share-wa','share-fb','share-ig'].forEach(id=>{
-      const el = document.getElementById(id);
-      if(!el) return;
-      if(id==='share-wa') el.href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL);
-      if(id==='share-fb') el.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL);
-      if(id==='share-ig') el.href = 'https://www.instagram.com/';
+    const aWa = document.getElementById('share-wa');
+    const aFb = document.getElementById('share-fb');
+    const aIg = document.getElementById('share-ig');
+    const nat = document.getElementById('btn-share-native');
+    if (aWa) aWa.href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL);
+    if (aFb) aFb.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL);
+    if (aIg) aIg.href = 'https://www.instagram.com/');
+
+    if (nat) nat.addEventListener('click', async ()=>{
+      if (navigator.share) {
+        try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(e){}
+      }
+      try { await navigator.clipboard.writeText(SITE_URL); } catch(e){}
     });
+
+    // Eventi da ICS (opzionale, stesso parser che avevi)
+    const ICS_URL = './events.ics';
+    async function loadICS(){
+      try{
+        const res = await fetch(ICS_URL, { cache: 'no-cache' });
+        if(!res.ok) return;
+        const raw = await res.text();
+        const text = raw.replace(/\r\n/g, '\n').replace(/\n[\t ]/g, '');
+        const events = [];
+        let ev = null;
+        for(const line of text.split(/\n+/)){
+          if(line.startsWith('BEGIN:VEVENT')){ ev = {}; continue; }
+          if(line.startsWith('END:VEVENT')){ if(ev) events.push(ev); ev = null; continue; }
+          if(!ev) continue;
+          const i = line.indexOf(':'); if(i === -1) continue;
+          const key = line.slice(0, i).toUpperCase();
+          const val = line.slice(i+1);
+          const parseDate = v => v && (v.length===16&&v.endsWith('Z')&&v.indexOf('T')===8
+            ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8)+'T'+v.slice(9,11)+':'+v.slice(11,13)+':'+v.slice(13,15)+'Z')
+            : v.length===15&&v.indexOf('T')===8
+              ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8)+'T'+v.slice(9,11)+':'+v.slice(11,13)+':'+v.slice(13,15))
+              : v.length===8 ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8))
+              : new Date(v));
+          if(key.startsWith('DTSTART')) ev.dtstart = parseDate(val);
+          else if(key.startsWith('DTEND')) ev.dtend = parseDate(val);
+          else if(key === 'SUMMARY') ev.summary = String(val).replace(/\\n/g,'\n').replace(/\\,/g,',').replace(/\\;/g,';');
+          else if(key === 'LOCATION') ev.location = String(val).replace(/\\n/g,'\n').replace(/\\,/g,',').replace(/\\;/g,';');
+        }
+        const wrap = document.getElementById('events-list');
+        if(!wrap) return;
+        wrap.innerHTML = '';
+        if(!events.length){ wrap.innerHTML = '<a class="item" style="pointer-events:none">Nessun evento imminente</a>'; return; }
+        const fmtDay = new Intl.DateTimeFormat('it-IT', { weekday:'long', day:'2-digit', month:'long' });
+        const fmtTime = new Intl.DateTimeFormat('it-IT', { hour:'2-digit', minute:'2-digit' });
+        events.sort((a,b)=> (a.dtstart||0) - (b.dtstart||0));
+        for(const e of events){
+          const when = e.dtstart ? `${fmtDay.format(e.dtstart)} · ${fmtTime.format(e.dtstart)}` : '';
+          const where = e.location || '';
+          const a = document.createElement('a');
+          a.className = 'item';
+          a.href = '#';
+          a.innerHTML = `<strong>${when}</strong><span style="color:var(--muted)">${where}</span>`;
+          wrap.appendChild(a);
+        }
+      }catch(_){}
+    }
+    loadICS();
   </script>
 </body>
 </html>
