@@ -10,12 +10,12 @@
   <meta property="og:description" content="Tutti i link e i documenti in un posto solo." />
 
   <!-- CSS principale (cache-busting) -->
-  <link rel="stylesheet" href="./style.css?v=4">
+  <link rel="stylesheet" href="./style.css?v=5">
 
   <!-- Montserrat per i testi interni alla card -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Stili minimi solo per sfondo e card: niente debug, niente effetti strani -->
+  <!-- SFONDO come layer fisso + card glass -->
   <style>
     :root {
       --card-bg: rgba(255,255,255,0.92);
@@ -26,22 +26,31 @@
     }
     * { box-sizing: border-box; }
     html, body { height: 100%; }
-    body {
+
+    /* ✅ Sfondo fisso full-screen come layer separato */
+    .page-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: url("./assets/bg-mobile.webp?v=5") center center / cover no-repeat;
+    }
+    /* Desktop: usa la versione orizzontale */
+    @media (min-width: 641px){
+      .page-bg{
+        background-image: url("./assets/bg-desktop.webp?v=5");
+      }
+    }
+
+    /* Il body torna “normale” (niente background qui) */
+    body{
       margin: 0;
       font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
       color: var(--text);
-      background: url("./assets/bg-mobile.webp?v=4") no-repeat center center;
-      background-size: cover;
-      background-attachment: scroll; /* no fixed su mobile (iOS bug) */
-      display: grid; place-items: center;
+      display: grid;
+      place-items: center;
       padding: 24px;
       min-height: 100svh;
-    }
-    @media (min-width: 641px){
-      body{
-        background-image: url("./assets/bg-desktop.webp?v=4");
-        background-attachment: fixed; /* solo desktop */
-      }
+      background: transparent;
     }
 
     /* Card “glass” centrata */
@@ -110,6 +119,9 @@
   </style>
 </head>
 <body>
+  <!-- ✅ Layer di sfondo fisso, copre sempre tutto -->
+  <div class="page-bg" aria-hidden="true"></div>
+
   <main class="container" role="main">
     <header>
       <img id="avatar-img" class="avatar" src="./assets/claudio.jpg" alt="Claudio Gemelli" onerror="this.style.display='none';document.getElementById('avatar-fallback').classList.remove('hidden')" />
