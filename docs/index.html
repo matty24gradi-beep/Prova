@@ -10,17 +10,25 @@
   <meta property="og:description" content="Tutti i link e i contatti in un unico posto." />
 
   <!-- CSS principale locale -->
-  <link rel="stylesheet" href="./style.css?v=11">
+  <link rel="stylesheet" href="./style.css?v=12">
 
   <style>
+    /* === FIX: il body del tuo style.css ha sfondo bianco.
+       Qui lo annulliamo per far vedere la .page-bg sotto. */
+    html, body { background: transparent !important; } /* FIX */
+    body { position: relative; } /* FIX: crea contesto per z-index sopra lo sfondo */
+
     /* ===== Sfondo full screen come layer fisso (docs/assets/) ===== */
     .page-bg{
-      position: fixed; inset: 0; z-index: -1;
-      background: url("./assets/bg-mobile.webp?v=11") center center / cover no-repeat;
+      position: fixed; inset: 0; z-index: 0; /* FIX: z-index non negativo */
+      background: url("./assets/bg-mobile.webp?v=12") center center / cover no-repeat;
     }
     @media (min-width: 641px){
-      .page-bg{ background-image: url("./assets/bg-desktop.webp?v=11"); }
+      .page-bg{ background-image: url("./assets/bg-desktop.webp?v=12"); }
     }
+
+    /* Mettiamo il contenuto “sopra” allo sfondo fisso */
+    .site-header.nav, .wrap-page { position: relative; z-index: 1; } /* FIX */
 
     /* ===== Layout 2 colonne ===== */
     body{
@@ -130,23 +138,19 @@
   <div class="wrap-page">
     <!-- SINISTRA: immagine + share -->
     <aside class="profile">
-      <img src="./assets/claudio.jpg?v=11" alt="Claudio Gemelli">
+      <img src="./assets/claudio.jpg?v=12" alt="Claudio Gemelli">
 
-      <!-- Bottoni circolari (PNG locali + aeroplanino inline) -->
+      <!-- Bottoni circolari -->
       <div class="quick-share" role="group" aria-label="Condividi">
-        <!-- WhatsApp -->
         <a id="qs-wa" class="qs-btn" href="#" target="_blank" rel="noopener" aria-label="WhatsApp" title="Condividi su WhatsApp">
-          <img src="./assets/whatsapp.png?v=11" alt="" aria-hidden="true">
+          <img src="./assets/whatsapp.png?v=12" alt="" aria-hidden="true">
         </a>
-        <!-- Facebook -->
         <a id="qs-fb" class="qs-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Condividi su Facebook">
-          <img src="./assets/facebook.png?v=11" alt="" aria-hidden="true">
+          <img src="./assets/facebook.png?v=12" alt="" aria-hidden="true">
         </a>
-        <!-- Instagram -->
         <a id="qs-ig" class="qs-btn" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" title="Apri Instagram">
-          <img src="./assets/instagram.png?v=11" alt="" aria-hidden="true">
+          <img src="./assets/instagram.png?v=12" alt="" aria-hidden="true">
         </a>
-        <!-- Condivisione generale (aeroplanino) -->
         <button id="qs-share" class="qs-btn" type="button" aria-label="Condividi" title="Condividi">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
             <path d="M21 3L10 14"/><path d="M21 3l-7 19-4-8-8-4 19-7z" />
@@ -229,5 +233,3 @@
   </script>
 </body>
 </html>
-
-
