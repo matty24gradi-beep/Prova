@@ -87,7 +87,12 @@
       margin:0 0 6px; font-weight:700;
       font-size: clamp(28px, 3.8vw, 44px); letter-spacing:-0.02em;
     }
-    .headline .lead{ margin:0; color:var(--muted); }
+    .headline .lead{
+  margin: 0;
+  color: #000;          /* ora è nero */
+  /* opzionale: un filo più grande */
+  /* font-size: clamp(1rem, 0.9rem + 0.4vw, 1.15rem); */
+}
 
     .section-block{ display:grid; gap:12px; }
     .section-title{
@@ -119,6 +124,23 @@
     @media (prefers-color-scheme: dark){
       .site-header.nav{ background: rgba(16,16,16,.86); }
     }
+    /* Poster / Istruzioni di voto sopra i Social */
+.poster { display:flex; justify-content:center; }
+.vote-img{
+  width: 100%;
+  max-width: 860px;      /* grande ma responsivo */
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.9); /* aiuta la leggibilità */
+  padding: 10px;         /* cornice sottile */
+  box-shadow: none;
+}
+@media (prefers-color-scheme: dark){
+  .vote-img{ background: rgba(16,16,16,.85); }
+}
+
   </style>
 </head>
 <body>
@@ -167,6 +189,19 @@
       </div>
 
       <!-- Social -->
+      <!-- Poster: Istruzioni di voto -->
+<section class="section-block" id="istruzioni">
+  <h2 class="section-title" style="display:none">Istruzioni di voto</h2>
+  <div class="poster">
+    <img
+      src="./assets/istruzioni-voto.png?v=13"
+      alt="Istruzioni di voto"
+      class="vote-img"
+      width="85" height="55"
+    >
+  </div>
+</section>
+
       <div id="social" class="section-block">
         <h2 class="section-title">Social</h2>
         <div class="tiles">
