@@ -9,51 +9,26 @@
   <meta property="og:title" content="Il tuo hub" />
   <meta property="og:description" content="Tutti i link e i documenti in un posto solo." />
 
-  <!-- CSS principale (cache-busting) -->
-  <link rel="stylesheet" href="./style.css?v=5">
+  <!-- CSS principale (il tuo Apple-style) -->
+  <link rel="stylesheet" href="./style.css?v=6">
 
-  <!-- Montserrat per i testi interni alla card -->
+  <!-- Montserrat (ok per i testi dentro le card) -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- SFONDO come layer fisso + card glass -->
+  <!-- Stili minimi locali (solo piccoli tocchi, il grosso è in style.css) -->
   <style>
-    :root {
+    :root{
       --card-bg: rgba(255,255,255,0.92);
-      --text: #0f172a;
-      --muted: #475569;
-      --border: rgba(15,23,42,0.08);
       --ring: rgba(14,165,233,0.45);
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-
-    /* ✅ Sfondo fisso full-screen come layer separato */
-    .page-bg{
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background: url("./assets/bg-mobile.webp?v=5") center center / cover no-repeat;
-    }
-    /* Desktop: usa la versione orizzontale */
-    @media (min-width: 641px){
-      .page-bg{
-        background-image: url("./assets/bg-desktop.webp?v=5");
-      }
+      --border: rgba(15,23,42,0.08);
     }
 
-    /* Il body torna “normale” (niente background qui) */
-    body{
-      margin: 0;
-      font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text);
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      min-height: 100svh;
-      background: transparent;
+    /* Tipografia della card con Montserrat */
+    .container, .link-btn, .doc-item, .event-card, .btn, .subtitle, .note {
+      font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
     }
 
-    /* Card “glass” centrata */
+    /* Card centrale (riuso del tuo stile) */
     .container {
       width: 100%; max-width: 760px;
       background: var(--card-bg);
@@ -62,26 +37,15 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.12);
       border-radius: 24px;
       padding: 28px;
+      margin-top: 24px;
     }
 
-    header { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+    header.card-head { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
     .avatar {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fff, #dbeafe);
-      border: 2px solid var(--border);
+      width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+      background: radial-gradient(circle at 30% 30%, #fff, #dbeafe); border: 2px solid var(--border);
       display: grid; place-items: center; font-weight: 700; color: #1e293b;
-      object-fit: cover;
     }
-    h1 { margin: 0 0 4px; font-size: clamp(1.25rem, 1.2rem + 1vw, 1.8rem); font-weight: 700; }
-    .subtitle { margin: 0; color: var(--muted); }
-    .note { margin-top: 6px; color: var(--muted); font-size: .92rem; }
-
-    .section { margin-top: 24px; }
-    .section h2 {
-      margin: 0 0 12px; font-size: 1rem; letter-spacing: .02em; text-transform: uppercase;
-      color: #111827; font-weight: 700;
-    }
-
     .links { display: grid; gap: 10px; }
     .link-btn {
       display: flex; align-items: center; gap: 12px; text-decoration: none;
@@ -91,119 +55,139 @@
     }
     .link-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); border-color: var(--ring); }
     .link-title { font-weight: 600; }
-    .link-desc { color: var(--muted); font-size: .92rem; }
+    .link-desc { color: #475569; font-size: .92rem; }
 
     .docs { display: grid; gap: 8px; }
     .doc-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #fff; border: 1px solid var(--border); border-radius: 12px; }
-    .doc-item a { color: #0f172a; text-decoration: none; }
     .doc-icon { width: 22px; height: 22px; }
 
     .events { display: grid; gap: 10px; }
     .event-card { background:#fff; border:1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
-    .event-where { color: var(--muted); font-size: .92rem; margin-bottom: 6px; }
-
     .share { display:flex; gap:8px; flex-wrap:wrap; }
     .btn {
       display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px;
       background:#111827; color:#fff; border:1px solid rgba(255,255,255,.08); text-decoration:none;
-      box-shadow: 0 2px 10px rgba(0,0,0,.08);
-      font-weight: 600;
+      box-shadow: 0 2px 10px rgba(0,0,0,.08); font-weight: 600;
     }
     .btn:focus { outline: 3px solid var(--ring); outline-offset: 2px; }
-
-    footer { margin-top: 26px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .contact { color: var(--muted); }
+    footer.page-foot { margin: 26px 0 0; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
     .badge { font-size: .82rem; color: #0ea5e9; background: #e0f2fe; border: 1px solid #bae6fd; padding: 4px 10px; border-radius: 999px; }
-    .hidden { display: none; }
-    .toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px 12px; box-shadow:0 8px 20px rgba(0,0,0,.12); }
+
+    /* Spaziatura sezione contenuti dopo l'hero */
+    .section { padding: 48px 0; }
+    @media (max-width: 880px){ .section { padding: 36px 0; } }
   </style>
 </head>
 <body>
-  <!-- ✅ Layer di sfondo fisso, copre sempre tutto -->
-  <div class="page-bg" aria-hidden="true"></div>
 
-  <main class="container" role="main">
-    <header>
-      <img id="avatar-img" class="avatar" src="./assets/claudio.jpg" alt="Claudio Gemelli" onerror="this.style.display='none';document.getElementById('avatar-fallback').classList.remove('hidden')" />
-      <div id="avatar-fallback" class="avatar hidden" aria-hidden="true">CG</div>
-      <div>
-        <h1>CLAUDIO GEMELLI</h1>
-        <p class="subtitle">Ecco tutte le informazioni utili per seguire la campagna elettorale</p>
-        <p class="note">Ultimo aggiornamento: <time id="last-updated" aria-live="polite">—</time></p>
+  <!-- NAVBAR vetrosa (già stilata in style.css) -->
+  <header class="site-header nav">
+    <div class="inner" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+      <a href="#" class="brand" style="font-weight:700;text-decoration:none;">Claudio Gemelli</a>
+      <nav style="display:flex;gap:12px;align-items:center;">
+        <a href="#social">Social</a>
+        <a href="#docs-title">Documenti</a>
+        <a href="#events-title">Eventi</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO full-bleed in stile Apple (usa i tuoi bg) -->
+  <section class="section-hero hero">
+    <picture class="hero-bg">
+      <source media="(max-width: 767px)" srcset="./assets/bg-mobile.webp?v=6">
+      <source media="(min-width: 768px)" srcset="./assets/bg-desktop.webp?v=6">
+      <img class="bg" src="./assets/bg-desktop.webp?v=6" alt="" aria-hidden="true">
+    </picture>
+
+    <div class="content hero__content inner">
+      <p class="kicker">Campagna 2025</p>
+      <h1 class="display">Semplice. Pulito. <span style="white-space:nowrap">Di classe.</span></h1>
+      <p class="lead">Tutti i link, i documenti e gli eventi in un'unica pagina chiara.</p>
+      <div class="hero-ctas" style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--accent" href="#social">Vai ai link</a>
+        <a class="btn btn--ghost" href="#events-title">Eventi</a>
       </div>
-    </header>
+    </div>
+  </section>
 
-    <section class="section" aria-labelledby="social-title">
-      <h2 id="social-title">Social</h2>
-      <div class="links">
-        <a class="link-btn" href="https://www.instagram.com/claudio.gemelli.fdi/" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+  <!-- CONTENUTI: la tua card “link-in-bio” sotto all’hero -->
+  <section class="section">
+    <div class="inner">
+      <main class="container" role="main">
+        <header class="card-head">
+          <img id="avatar-img" class="avatar" src="./assets/claudio.jpg" alt="Claudio Gemelli"
+               onerror="this.style.display='none';document.getElementById('avatar-fallback').classList.remove('hidden')" />
+          <div id="avatar-fallback" class="avatar hidden" aria-hidden="true">CG</div>
           <div>
-            <div class="link-title">Instagram</div>
-            <div class="link-desc">@claudio.gemelli.fdi</div>
+            <h2 style="margin:0 0 4px;font-size:1.25rem;letter-spacing:.01em">CLAUDIO GEMELLI</h2>
+            <p class="subtitle">Ecco tutte le informazioni utili per seguire la campagna elettorale</p>
+            <p class="note">Ultimo aggiornamento: <time id="last-updated" aria-live="polite">—</time></p>
           </div>
-        </a>
-        <a class="link-btn" href="https://www.facebook.com/share/15F4udkWZwo/?mibextid=wwXIfr" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M13.5 22v-8.2H16l.4-3.2h-2.9V8.3c0-.9.3-1.6 1.6-1.6h1.8V3.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H8v3.2h2.3V22h3.2Z"/></svg>
-          <div>
-            <div class="link-title">Facebook</div>
-            <div class="link-desc">@claudio.gemelli.fdi</div>
+        </header>
+
+        <section class="section" id="social" aria-labelledby="social-title" style="padding-top:24px">
+          <h2 id="social-title">Social</h2>
+          <div class="links">
+            <a class="link-btn" href="https://www.instagram.com/claudio.gemelli.fdi/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+              <div>
+                <div class="link-title">Instagram</div>
+                <div class="link-desc">@claudio.gemelli.fdi</div>
+              </div>
+            </a>
+            <a class="link-btn" href="https://www.facebook.com/share/15F4udkWZwo/?mibextid=wwXIfr" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M13.5 22v-8.2H16l.4-3.2h-2.9V8.3c0-.9.3-1.6 1.6-1.6h1.8V3.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H8v3.2h2.3V22h3.2Z"/></svg>
+              <div>
+                <div class="link-title">Facebook</div>
+                <div class="link-desc">@claudio.gemelli.fdi</div>
+              </div>
+            </a>
           </div>
-        </a>
-      </div>
-      <p class="note">Suggerimento: aggiungi parametri UTM ai link per tracciare il traffico dal QR.</p>
-    </section>
+          <p class="note">Suggerimento: aggiungi parametri UTM ai link per tracciare il traffico dal QR.</p>
+        </section>
 
-    <section class="section" aria-labelledby="docs-title">
-      <h2 id="docs-title">Documenti</h2>
-      <div class="docs" id="docs-list"></div>
-    </section>
+        <section class="section" aria-labelledby="docs-title" style="padding-top:0">
+          <h2 id="docs-title">Documenti</h2>
+          <div class="docs" id="docs-list"></div>
+        </section>
 
-    <section class="section" aria-labelledby="events-title">
-      <h2 id="events-title">Eventi</h2>
-      <div id="events-list" class="events"></div>
-      <p class="note"><a href="./events.ics" download>Scarica il calendario (.ics)</a></p>
-    </section>
+        <section class="section" aria-labelledby="events-title" style="padding-top:0">
+          <h2 id="events-title">Eventi</h2>
+          <div id="events-list" class="events"></div>
+          <p class="note"><a href="./events.ics" download>Scarica il calendario (.ics)</a></p>
+        </section>
 
-    <section class="section" aria-labelledby="share-title">
-      <h2 id="share-title">Condividi</h2>
-      <div class="share" role="group" aria-label="Azioni di condivisione">
-        <a id="share-wa" class="btn" href="#" target="_blank" rel="noopener" aria-label="Condividi su WhatsApp">WhatsApp</a>
-        <a id="share-fb" class="btn" href="#" target="_blank" rel="noopener" aria-label="Condividi su Facebook">Facebook</a>
-        <a id="share-ig" class="btn" href="#" target="_blank" rel="noopener" aria-label="Condividi su Instagram">Instagram</a>
-        <button id="btn-share-native" class="btn" type="button" aria-label="Condividi">Condividi</button>
-      </div>
-      <div id="copy-toast" class="toast hidden" role="status" aria-live="polite">Link copiato negli appunti ✅</div>
-    </section>
-
-    <section class="section" aria-labelledby="extra-title">
-      <h2 id="extra-title">Extra</h2>
-      <div class="links">
-        <a class="link-btn" href="#" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-          <div>
-            <div class="link-title">Modulo contatti</div>
-            <div class="link-desc">Collega un Google Form o Typeform</div>
+        <section class="section" aria-labelledby="extra-title" style="padding-top:0">
+          <h2 id="extra-title">Extra</h2>
+          <div class="links">
+            <a class="link-btn" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+              <div>
+                <div class="link-title">Modulo contatti</div>
+                <div class="link-desc">Collega un Google Form o Typeform</div>
+              </div>
+            </a>
+            <a class="link-btn" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              <div>
+                <div class="link-title">Calendario appuntamenti</div>
+                <div class="link-desc">Linka Calendly o Google Calendar</div>
+              </div>
+            </a>
           </div>
-        </a>
-        <a class="link-btn" href="#" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <div>
-            <div class="link-title">Calendario appuntamenti</div>
-            <div class="link-desc">Linka Calendly o Google Calendar</div>
-          </div>
-        </a>
-      </div>
-    </section>
+        </section>
 
-    <footer>
-      <div class="contact">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></div>
-      <span class="badge">QR-ready</span>
-    </footer>
-  </main>
+        <footer class="page-foot">
+          <div class="contact">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></div>
+          <span class="badge">QR-ready</span>
+        </footer>
+      </main>
+    </div>
+  </section>
 
   <script>
-    // === Data ultima modifica ===
+    // Data ultima modifica
     (function(){
       const t = document.getElementById('last-updated');
       if (!t) return;
@@ -213,95 +197,16 @@
       t.setAttribute('datetime', d.toISOString());
     })();
 
-    // === Condivisione ===
+    // Condivisione
     const SITE_URL = (typeof window !== 'undefined' && window.location && window.location.href) ? window.location.href : '';
     const text = 'Scopri il programma e gli eventi:';
-    const aWa = document.getElementById('share-wa');
-    const aFb = document.getElementById('share-fb');
-    const aIg = document.getElementById('share-ig');
-    const nat = document.getElementById('btn-share-native');
-    const toast = document.getElementById('copy-toast');
-
-    const waHref = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL);
-    const fbHref = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL);
-    const igHref = 'https://www.instagram.com/';
-
-    if (aWa) aWa.setAttribute('href', waHref);
-    if (aFb) aFb.setAttribute('href', fbHref);
-    if (aIg) aIg.setAttribute('href', igHref);
-
-    function copyLink(){
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        return navigator.clipboard.writeText(SITE_URL).then(()=>{
-          if (toast) { toast.classList.remove('hidden'); setTimeout(()=>toast.classList.add('hidden'), 1800); }
-        });
-      }
-    }
-
-    if (aIg) aIg.addEventListener('click', async (e)=>{
-      if (navigator.share) {
-        e.preventDefault();
-        try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; }
-        catch (err) {}
-      }
-      e.preventDefault();
-      await copyLink();
-      const w = window.open(igHref, '_blank'); if (w) w.opener = null;
+    ['share-wa','share-fb','share-ig'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      if(id==='share-wa') el.href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL);
+      if(id==='share-fb') el.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL);
+      if(id==='share-ig') el.href = 'https://www.instagram.com/';
     });
-
-    if (nat) nat.addEventListener('click', async ()=>{
-      if (navigator.share) {
-        try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(e){}
-      }
-      await copyLink();
-    });
-
-    // === Eventi da ICS (opzionale) ===
-    const ICS_URL = './events.ics';
-    async function loadICS(){
-      try{
-        const res = await fetch(ICS_URL, { cache: 'no-cache' });
-        if(!res.ok) return;
-        const raw = await res.text();
-        const text = raw.replace(/\r\n/g, '\n').replace(/\n[\t ]/g, '');
-        const events = [];
-        let ev = null;
-        for(const line of text.split(/\n+/)){
-          if(line.startsWith('BEGIN:VEVENT')){ ev = {}; continue; }
-          if(line.startsWith('END:VEVENT')){ if(ev) events.push(ev); ev = null; continue; }
-          if(!ev) continue;
-          const i = line.indexOf(':'); if(i === -1) continue;
-          const key = line.slice(0, i).toUpperCase();
-          const val = line.slice(i+1);
-          const parseDate = v => v && (v.length===16&&v.endsWith('Z')&&v.indexOf('T')===8
-            ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8)+'T'+v.slice(9,11)+':'+v.slice(11,13)+':'+v.slice(13,15)+'Z')
-            : v.length===15&&v.indexOf('T')===8
-              ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8)+'T'+v.slice(9,11)+':'+v.slice(11,13)+':'+v.slice(13,15))
-              : v.length===8 ? new Date(v.slice(0,4)+'-'+v.slice(4,6)+'-'+v.slice(6,8))
-              : new Date(v));
-          if(key.startsWith('DTSTART')) ev.dtstart = parseDate(val);
-          else if(key.startsWith('DTEND')) ev.dtend = parseDate(val);
-          else if(key === 'SUMMARY') ev.summary = String(val).replace(/\\n/g,'\n').replace(/\\,/g,',').replace(/\\;/g,';');
-          else if(key === 'LOCATION') ev.location = String(val).replace(/\\n/g,'\n').replace(/\\,/g,',').replace(/\\;/g,';');
-        }
-        const wrap = document.getElementById('events-list');
-        if(!wrap) return;
-        wrap.innerHTML = '';
-        if(!events.length){ wrap.innerHTML = '<p class="note">Nessun evento imminente.</p>'; return; }
-        const fmtDay = new Intl.DateTimeFormat('it-IT', { weekday:'long', day:'2-digit', month:'long' });
-        const fmtTime = new Intl.DateTimeFormat('it-IT', { hour:'2-digit', minute:'2-digit' });
-        events.sort((a,b)=> (a.dtstart||0) - (b.dtstart||0));
-        for(const e of events){
-          const when = e.dtstart ? `${fmtDay.format(e.dtstart)} · ${fmtTime.format(e.dtstart)}` : '';
-          const where = e.location || '';
-          const div = document.createElement('div');
-          div.className = 'event-card';
-          div.innerHTML = `<div class="event-when">${when}</div><div class="event-where">${where}</div><div class="event-title">${e.summary||''}</div>`;
-          wrap.appendChild(div);
-        }
-      }catch(_){}
-    }
-    loadICS();
   </script>
 </body>
 </html>
