@@ -9,27 +9,23 @@
   <meta property="og:title" content="Claudio Gemelli — hub" />
   <meta property="og:description" content="Tutti i link e i documenti in un posto solo." />
 
-  <!-- CSS principale già creato -->
-  <link rel="stylesheet" href="./style.css?v=7">
-  <!-- Montserrat solo per testi (ok) -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- CSS principale locale -->
+  <link rel="stylesheet" href="./style.css?v=10">
 
-  <!-- Stili mirati per il nuovo layout (nessuna ombra) -->
   <style>
-    /* ===== Sfondo full screen come layer fisso ===== */
+    /* ===== Sfondo full screen come layer fisso (docs/assets/) ===== */
     .page-bg{
       position: fixed; inset: 0; z-index: -1;
-      background: url("./assets/bg-mobile.webp?v=7") center center / cover no-repeat;
+      background: url("./assets/bg-mobile.webp?v=10") center center / cover no-repeat;
     }
     @media (min-width: 641px){
-      .page-bg{ background-image: url("./assets/bg-desktop.webp?v=7"); }
+      .page-bg{ background-image: url("./assets/bg-desktop.webp?v=10"); }
     }
 
-    /* ===== Layout a due colonne (foto sinistra, contenuti destra) ===== */
+    /* ===== Layout 2 colonne ===== */
     body{
       margin:0; min-height:100svh; color:var(--fg);
-      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
-      display:block; /* niente grid centrale: pagina “libera” */
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
     }
     .wrap-page{
       max-width:var(--container);
@@ -44,67 +40,76 @@
       .wrap-page{ grid-template-columns: 1fr; }
     }
 
-    /* ===== Colonna sinistra: immagine fissa/“ancorata” ===== */
+    /* ===== Colonna sinistra: immagine + share circolari ===== */
     .profile{
       position:sticky; top: clamp(12px, 3vw, 28px);
-      display:flex; flex-direction:column; gap:12px;
+      display:flex; flex-direction:column; gap:14px;
     }
     .profile img{
       width:100%; max-width:320px; height:auto; display:block; border-radius: var(--radius-lg);
-      object-fit:cover; border:1px solid var(--line);
-      box-shadow:none; /* no ombre */
+      object-fit:cover; border:1px solid var(--line); box-shadow:none;
     }
     @media (max-width:880px){
-      .profile{ position:static; max-width: 220px; }
+      .profile{ position:static; max-width: 240px; }
     }
 
-    /* ===== Colonna destra: contenuti ordinati, zero ombre ===== */
-    .content{ display:grid; gap: clamp(16px, 2.6vw, 24px); }
+    /* Bottoni share circolari */
+    .quick-share{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .qs-btn{
+      width:48px; height:48px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center;
+      background: rgba(255,255,255,.86); color:#111827; text-decoration:none;
+      border:1px solid var(--line); box-shadow:none; cursor:pointer;
+      -webkit-backdrop-filter: saturate(140%) blur(6px); backdrop-filter: saturate(140%) blur(6px);
+      transition: background .2s ease, border-color .2s ease, transform .06s ease;
+    }
+    .qs-btn:hover{ background: rgba(255,255,255,.94); border-color: rgba(0,0,0,.12); transform: translateY(-1px); }
+    .qs-btn svg{ width:22px; height:22px; display:block; }
+
+    @media (prefers-color-scheme: dark){
+      .qs-btn{ background: rgba(16,16,16,.86); }
+      .qs-btn:hover{ background: rgba(16,16,16,.94); border-color: rgba(255,255,255,.12); }
+      .profile img{ border-color:#2b2b2b; }
+    }
+
+    /* ===== Colonna destra: contenuti piatti ===== */
+    .content{ display:grid; gap: clamp(18px, 3vw, 28px); }
     .headline h1{
       margin:0 0 6px; font-weight:700;
       font-size: clamp(28px, 3.8vw, 44px); letter-spacing:-0.02em;
     }
     .headline .lead{ margin:0; color:var(--muted); }
 
-    /* Sezioni – nessuna “card”, solo titoli e blocchi separati */
     .section-block{ display:grid; gap:12px; }
     .section-title{
       margin:0; font-size: var(--fs-1); font-weight:700; letter-spacing:.02em; text-transform: uppercase;
     }
 
-    /* ===== Pulsanti separati stile Apple: bordi sottili, hover delicato, no ombra ===== */
+    /* Pulsanti piatti (no ombre) */
     .tiles{ display:grid; gap:10px; }
     .tile{
       display:flex; align-items:center; gap:12px; text-decoration:none;
       padding:14px 16px; border-radius:14px;
-      background: rgba(255,255,255,.86);
-      border:1px solid var(--line);
-      color: var(--fg);
-      box-shadow:none; /* no ombre */
-      transition: background .2s ease, border-color .2s ease, transform .06s ease;
+      background: rgba(255,255,255,.86); color: var(--fg);
+      border:1px solid var(--line); box-shadow:none;
       -webkit-backdrop-filter: saturate(140%) blur(6px); backdrop-filter: saturate(140%) blur(6px);
+      transition: background .2s ease, border-color .2s ease, transform .06s ease;
     }
     .tile:hover{ background: rgba(255,255,255,.94); border-color: rgba(0,0,0,.12); transform: translateY(-1px); }
-    .tile:active{ transform: translateY(0); }
     .tile svg{ width:22px; height:22px; flex:0 0 22px; }
-    .tile .t-title{ font-weight:600; }
-    .tile .t-desc{ color:var(--muted); font-size:.92rem; }
+    .t-title{ font-weight:600; }
+    .t-desc{ color:var(--muted); font-size:.92rem; }
 
-    /* Documenti / Eventi stessi tile “flat” */
-    .item{
-      display:flex; align-items:center; gap:10px;
-      padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.86); border:1px solid var(--line);
-      text-decoration:none; color:var(--fg);
+    @media (prefers-color-scheme: dark){
+      .tile{ background: rgba(16,16,16,.86); }
+      .tile:hover{ background: rgba(16,16,16,.94); border-color: rgba(255,255,255,.12); }
     }
 
-    /* Footer leggero */
-    .foot{ color:var(--muted); font-size:.92rem; }
-
-    /* Dark mode coerente con il tuo style.css */
+    /* Navbar vetrosa minima */
+    .site-header.nav{ background: rgba(255,255,255,.86); }
     @media (prefers-color-scheme: dark){
-      .tile, .item{ background:rgba(16,16,16,.86); }
-      .tile:hover{ background:rgba(16,16,16,.94); border-color:rgba(255,255,255,.12); }
-      .profile img{ border-color:#2b2b2b; }
+      .site-header.nav{ background: rgba(16,16,16,.86); }
     }
   </style>
 </head>
@@ -112,7 +117,7 @@
   <!-- Sfondo fisso full-screen -->
   <div class="page-bg" aria-hidden="true"></div>
 
-  <!-- Navbar vetrosa minimale (opzionale, resta pulita) -->
+  <!-- Navbar vetrosa minima -->
   <header class="site-header nav">
     <div class="inner" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
       <span class="brand" style="font-weight:700">Claudio Gemelli</span>
@@ -125,12 +130,61 @@
   </header>
 
   <div class="wrap-page">
-    <!-- SINISTRA: immagine -->
+    <!-- SINISTRA: immagine + share -->
     <aside class="profile">
-      <img src="./assets/claudio.jpg" alt="Claudio Gemelli">
+      <img src="./assets/claudio.jpg?v=10" alt="Claudio Gemelli">
+
+      <!-- Bottoni circolari con icone inline (nessuna dipendenza esterna) -->
+      <div class="quick-share" role="group" aria-label="Condividi">
+        <!-- WhatsApp -->
+        <a id="qs-wa" class="qs-btn" href="#" target="_blank" rel="noopener" aria-label="WhatsApp" title="Condividi su WhatsApp">
+          <!-- Logo ufficiale WhatsApp (verde 25D366) -->
+          <svg viewBox="0 0 256 256" aria-hidden="true">
+            <path fill="#25D366" d="M36.4 219.6A127.9 127.9 0 1 1 219.6 36.4 127.9 127.9 0 0 1 36.4 219.6Z"/>
+            <path fill="#FFF" d="M190.8 163.6c-2.4 6.9-11.8 12.7-19 14.4c-5.1 1.2-11.7 2.2-34.1-7.3c-28.6-12.3-47-42.6-48.4-44.5s-11.6-15.4-11.6-29.3s7.1-20.7 9.6-23.5a20.2 20.2 0 0 1 14.5-6.7c3.5 0 6.6 0 9.5.2s7.1-1.2 10.9 8.4c2.4 5.9 5.1 11.4 5.5 12.2s.7 1.8.1 2.9s-.9 1.8-1.8 2.9s-1.8 2.1-2.7 3.2c-.9 1.1-1.8 2.1-2.7 3.5s-1.9 3.1-.8 5s4.7 7.8 10.1 12.7c6.9 6.2 12.8 8.1 15 9.1s3.9.8 5.4-.5s6.2-7.2 7.9-9.6s3.3-2 5.4-1.2s14.1 6.7 16.5 7.9s4 1.8 4.6 2.8a20.5 20.5 0 0 1-1.4 11.6Z"/>
+            <path fill="#FFF" d="M69.9 199.3l6.8-25.1a84.4 84.4 0 1 1 31.1 30l-27.9 4.9Z"/>
+            <path fill="#25D366" d="M98.3 193.5a73.6 73.6 0 1 0-26.8-26l-3.9 14.6l15.3-2.7l15.4-2.9Z"/>
+          </svg>
+        </a>
+
+        <!-- Facebook -->
+        <a id="qs-fb" class="qs-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Condividi su Facebook">
+          <!-- Logo ufficiale Facebook (blu 1877F2) -->
+          <svg viewBox="0 0 256 256" aria-hidden="true">
+            <rect width="256" height="256" rx="56" fill="#1877F2"/>
+            <path fill="#FFF" d="M173 73h-20c-22.1 0-36.9 14.7-36.9 37.4v16.5H99v27.5h17.1V213h29v-58.6h19.6l3-27.5H145v-14.2c0-8 2-12.1 12.6-12.1H173V73z"/>
+          </svg>
+        </a>
+
+        <!-- Instagram -->
+        <a id="qs-ig" class="qs-btn" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" title="Apri Instagram">
+          <!-- Logo ufficiale Instagram con gradiente -->
+          <svg viewBox="0 0 256 256" aria-hidden="true">
+            <defs>
+              <linearGradient id="igGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#F58529"/>
+                <stop offset="30%" stop-color="#FEDA77"/>
+                <stop offset="60%" stop-color="#DD2A7B"/>
+                <stop offset="100%" stop-color="#8134AF"/>
+              </linearGradient>
+            </defs>
+            <rect x="24" y="24" width="208" height="208" rx="48" fill="url(#igGrad)"/>
+            <circle cx="176" cy="80" r="16" fill="#FFF"/>
+            <circle cx="128" cy="128" r="48" fill="none" stroke="#FFF" stroke-width="24"/>
+            <rect x="24" y="24" width="208" height="208" rx="48" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="12"/>
+          </svg>
+        </a>
+
+        <!-- Condivisione generale (aeroplanino) -->
+        <button id="qs-share" class="qs-btn" type="button" aria-label="Condividi" title="Condividi">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <path d="M21 3L10 14"/><path d="M21 3l-7 19-4-8-8-4 19-7z" />
+          </svg>
+        </button>
+      </div>
     </aside>
 
-    <!-- DESTRA: contenuti a tutta pagina, pulsanti separati -->
+    <!-- DESTRA: contenuti -->
     <section class="content">
       <div class="headline">
         <h1>CLAUDIO GEMELLI</h1>
@@ -142,7 +196,21 @@
         <h2 class="section-title">Social</h2>
         <div class="tiles">
           <a class="tile" href="https://www.instagram.com/claudio.gemelli.fdi/" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+            <!-- icona Instagram inline -->
+            <svg viewBox="0 0 256 256" aria-hidden="true">
+              <defs>
+                <linearGradient id="igGrad2" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#F58529"/>
+                  <stop offset="30%" stop-color="#FEDA77"/>
+                  <stop offset="60%" stop-color="#DD2A7B"/>
+                  <stop offset="100%" stop-color="#8134AF"/>
+                </linearGradient>
+              </defs>
+              <rect x="24" y="24" width="208" height="208" rx="48" fill="url(#igGrad2)"/>
+              <circle cx="176" cy="80" r="16" fill="#FFF"/>
+              <circle cx="128" cy="128" r="48" fill="none" stroke="#FFF" stroke-width="24"/>
+              <rect x="24" y="24" width="208" height="208" rx="48" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="12"/>
+            </svg>
             <div>
               <div class="t-title">Instagram</div>
               <div class="t-desc">@claudio.gemelli.fdi</div>
@@ -150,7 +218,11 @@
           </a>
 
           <a class="tile" href="https://www.facebook.com/share/15F4udkWZwo/?mibextid=wwXIfr" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M13.5 22v-8.2H16l.4-3.2h-2.9V8.3c0-.9.3-1.6 1.6-1.6h1.8V3.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H8v3.2h2.3V22h3.2Z"/></svg>
+            <!-- icona Facebook inline -->
+            <svg viewBox="0 0 256 256" aria-hidden="true">
+              <rect width="256" height="256" rx="56" fill="#1877F2"/>
+              <path fill="#FFF" d="M173 73h-20c-22.1 0-36.9 14.7-36.9 37.4v16.5H99v27.5h17.1V213h29v-58.6h19.6l3-27.5H145v-14.2c0-8 2-12.1 12.6-12.1H173V73z"/>
+            </svg>
             <div>
               <div class="t-title">Facebook</div>
               <div class="t-desc">@claudio.gemelli.fdi</div>
@@ -163,9 +235,9 @@
       <div id="docs" class="section-block">
         <h2 class="section-title">Documenti</h2>
         <div id="docs-list" class="tiles">
-          <!-- Esempio di voce
-          <a class="item" href="./assets/programma.pdf" target="_blank" rel="noopener">
-            <span class="doc-icon" aria-hidden="true">📄</span> Programma
+          <!-- Esempio:
+          <a class="tile" href="./assets/programma.pdf" target="_blank" rel="noopener">
+            <span aria-hidden="true">📄</span> Programma
           </a> -->
         </div>
       </div>
@@ -174,74 +246,32 @@
       <div id="events" class="section-block">
         <h2 class="section-title">Eventi</h2>
         <div id="events-list" class="tiles"></div>
-        <p class="foot"><a href="./events.ics" download>Scarica calendario (.ics)</a></p>
+        <p class="muted"><a href="./events.ics" download>Scarica calendario (.ics)</a></p>
       </div>
 
-      <!-- Condividi / Extra -->
-      <div class="section-block">
-        <h2 class="section-title">Condividi</h2>
-        <div class="tiles" role="group" aria-label="Azioni di condivisione">
-          <a id="share-wa" class="tile" href="#" target="_blank" rel="noopener">WhatsApp</a>
-          <a id="share-fb" class="tile" href="#" target="_blank" rel="noopener">Facebook</a>
-          <a id="share-ig" class="tile" href="#" target="_blank" rel="noopener">Instagram</a>
-          <button id="btn-share-native" class="tile" type="button" style="cursor:pointer">Condividi</button>
-        </div>
-      </div>
-
-      <div class="section-block">
-        <h2 class="section-title">Extra</h2>
-        <div class="tiles">
-          <a class="tile" href="#" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-            <div>
-              <div class="t-title">Modulo contatti</div>
-              <div class="t-desc">Collega un Google Form o Typeform</div>
-            </div>
-          </a>
-          <a class="tile" href="#" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            <div>
-              <div class="t-title">Calendario appuntamenti</div>
-              <div class="t-desc">Linka Calendly o Google Calendar</div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <p class="foot">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></p>
+      <p class="muted">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></p>
     </section>
   </div>
 
   <script>
-    // Ultimo aggiornamento (se vuoi visualizzarlo, aggiungi un <time id="last-updated"> dove preferisci)
-    (function(){
-      const t = document.getElementById('last-updated');
-      if (!t) return;
-      const d = new Date(document.lastModified);
-      const fmt = new Intl.DateTimeFormat('it-IT', { dateStyle: 'long', timeStyle: 'short' });
-      t.textContent = fmt.format(d);
-      t.setAttribute('datetime', d.toISOString());
-    })();
-
-    // Share base
+    // Condivisione veloce (nessuna dipendenza esterna)
     const SITE_URL = (typeof window !== 'undefined' && window.location && window.location.href) ? window.location.href : '';
     const text = 'Scopri il programma e gli eventi:';
-    const aWa = document.getElementById('share-wa');
-    const aFb = document.getElementById('share-fb');
-    const aIg = document.getElementById('share-ig');
-    const nat = document.getElementById('btn-share-native');
-    if (aWa) aWa.href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL);
-    if (aFb) aFb.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL);
-    if (aIg) aIg.href = 'https://www.instagram.com/');
+    const qsWa = document.getElementById('qs-wa');
+    const qsFb = document.getElementById('qs-fb');
+    const qsShare = document.getElementById('qs-share');
 
-    if (nat) nat.addEventListener('click', async ()=>{
+    if (qsWa) qsWa.href = 'https://wa.me/?text=' + encodeURIComponent(text + ' ' + SITE_URL);
+    if (qsFb) qsFb.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL);
+
+    if (qsShare) qsShare.addEventListener('click', async ()=>{
       if (navigator.share) {
-        try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(e){}
+        try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(_){}
       }
-      try { await navigator.clipboard.writeText(SITE_URL); } catch(e){}
+      try { await navigator.clipboard.writeText(SITE_URL); } catch(_){}
     });
 
-    // Eventi da ICS (opzionale, stesso parser che avevi)
+    // Eventi da ICS (docs/events.ics)
     const ICS_URL = './events.ics';
     async function loadICS(){
       try{
@@ -272,18 +302,20 @@
         const wrap = document.getElementById('events-list');
         if(!wrap) return;
         wrap.innerHTML = '';
-        if(!events.length){ wrap.innerHTML = '<a class="item" style="pointer-events:none">Nessun evento imminente</a>'; return; }
+        if(!events.length){
+          wrap.innerHTML = '<div class="tile" style="pointer-events:none">Nessun evento imminente</div>';
+          return;
+        }
         const fmtDay = new Intl.DateTimeFormat('it-IT', { weekday:'long', day:'2-digit', month:'long' });
         const fmtTime = new Intl.DateTimeFormat('it-IT', { hour:'2-digit', minute:'2-digit' });
         events.sort((a,b)=> (a.dtstart||0) - (b.dtstart||0));
         for(const e of events){
           const when = e.dtstart ? `${fmtDay.format(e.dtstart)} · ${fmtTime.format(e.dtstart)}` : '';
           const where = e.location || '';
-          const a = document.createElement('a');
-          a.className = 'item';
-          a.href = '#';
-          a.innerHTML = `<strong>${when}</strong><span style="color:var(--muted)">${where}</span>`;
-          wrap.appendChild(a);
+          const div = document.createElement('div');
+          div.className = 'tile';
+          div.innerHTML = `<strong>${when}</strong><span style="color:var(--muted)">${where}</span>`;
+          wrap.appendChild(div);
         }
       }catch(_){}
     }
@@ -291,3 +323,4 @@
   </script>
 </body>
 </html>
+
