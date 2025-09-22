@@ -1,166 +1,162 @@
 <!doctype html>
-<html lang="it">
+<html lang="it" class="no-js">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Claudio Gemelli — hub</title>
-  <meta name="description" content="Link e contatti della campagna elettorale." />
+  <meta name="description" content="Link, contatti e aggiornamenti della campagna elettorale." />
   <meta name="theme-color" content="#0b0b0b" />
+  <meta name="color-scheme" content="dark light" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <link rel="canonical" href="https://votagemelli.github.io/links/" />
+
+  <!-- Social cards -->
+  <meta property="og:type" content="website" />
   <meta property="og:title" content="Claudio Gemelli — hub" />
   <meta property="og:description" content="Tutti i link e i contatti in un unico posto." />
+  <meta property="og:url" content="https://votagemelli.github.io/links/" />
+  <meta property="og:image" content="./assets/og.jpg?v=1" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon (metti i file in /assets) -->
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="./assets/favicon-32.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
 
   <!-- CSS principale locale -->
   <link rel="stylesheet" href="./style.css?v=12">
 
+  <!-- Preload immagini critiche (opzionale) -->
+  <link rel="preload" as="image" href="./assets/bg-desktop.webp?v=12" imagesrcset="./assets/bg-mobile.webp?v=12 640w, ./assets/bg-desktop.webp?v=12 1280w" imagesizes="100vw">
+
   <style>
-    /* === FIX: il body del tuo style.css ha sfondo bianco.
-       Qui lo annulliamo per far vedere la .page-bg sotto. */
-    html, body { background: transparent !important; } /* FIX */
-    body { position: relative; } /* FIX: crea contesto per z-index sopra lo sfondo */
-
-    /* ===== Sfondo full screen come layer fisso (docs/assets/) ===== */
-    .page-bg{
-      position: fixed; inset: 0; z-index: 0; /* FIX: z-index non negativo */
-      background: url("./assets/bg-mobile.webp?v=12") center center / cover no-repeat;
+    /* ====== Base & tokens (fallback, nel caso non fossero nel tuo style.css) ====== */
+    :root{
+      --container: 1100px;
+      --radius: 14px;
+      --radius-lg: 16px;
+      --line: rgba(0,0,0,.08);
+      --fg: #0b0b0b;
+      --muted: #6b7280;
+      --fs-1: .86rem;
     }
-    @media (min-width: 641px){
-      .page-bg{ background-image: url("./assets/bg-desktop.webp?v=12"); }
-    }
-
-    /* Mettiamo il contenuto “sopra” allo sfondo fisso */
-    .site-header.nav, .wrap-page { position: relative; z-index: 1; } /* FIX */
-
-    /* ===== Layout 2 colonne ===== */
-    body{
-      margin:0; min-height:100svh; color:var(--fg);
-      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
-    }
-    .wrap-page{
-      max-width:var(--container);
-      margin:0 auto;
-      padding: clamp(16px, 4vw, 40px) 20px;
-      display:grid;
-      grid-template-columns: 320px 1fr;
-      gap: clamp(18px, 4vw, 40px);
-      align-items:start;
-    }
-    @media (max-width: 880px){
-      .wrap-page{ grid-template-columns: 1fr; }
-    }
-
-    /* ===== Colonna sinistra: immagine + share circolari ===== */
-    .profile{
-      position:sticky; top: clamp(12px, 3vw, 28px);
-      display:flex; flex-direction:column; gap:14px;
-    }
-    .profile img{
-      width:100%; max-width:320px; height:auto; display:block; border-radius: var(--radius-lg);
-      object-fit:cover; border:1px solid var(--line); box-shadow:none;
-    }
-    @media (max-width:880px){
-      .profile{ position:static; max-width: 240px; }
-    }
-
-    /* Bottoni share circolari (PNG locali) */
-    .quick-share{
-      display:flex; gap:10px; flex-wrap:wrap;
-    }
-    .qs-btn{
-      width:48px; height:48px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center;
-      background: rgba(255,255,255,.86); color:#111827; text-decoration:none;
-      border:1px solid var(--line); box-shadow:none; cursor:pointer;
-      -webkit-backdrop-filter: saturate(140%) blur(6px); backdrop-filter: saturate(140%) blur(6px);
-      transition: background .2s ease, border-color .2s ease, transform .06s ease;
-    }
-    .qs-btn:hover{ background: rgba(255,255,255,.94); border-color: rgba(0,0,0,.12); transform: translateY(-1px); }
-    .qs-btn img, .qs-btn svg{ width:22px; height:22px; display:block; }
-
     @media (prefers-color-scheme: dark){
-      .qs-btn{ background: rgba(16,16,16,.86); }
-      .qs-btn:hover{ background: rgba(16,16,16,.94); border-color: rgba(255,255,255,.12); }
+      :root{ --line: rgba(255,255,255,.12); --fg:#ececec; --muted:#9ca3af; }
+    }
+
+    /* Rimuove background bianco impostato nel CSS esterno */
+    html, body{ background: transparent !important; }
+    body{ position: relative; margin:0; min-height:100svh; color:var(--fg);
+      font-family: ui-sans-serif, -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif;
+      text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===== Sfondo fullscreen con overlay leggero ===== */
+    .page-bg{ position: fixed; inset: 0; z-index: 0; background: center/cover no-repeat url("./assets/bg-mobile.webp?v=12"); }
+    .page-bg::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,.20), rgba(0,0,0,.10) 28%, rgba(0,0,0,.30)); }
+    @media (min-width: 641px){ .page-bg{ background-image: url("./assets/bg-desktop.webp?v=12"); } }
+
+    /* ===== Header sticky vetroso ===== */
+    .site-header{ position: sticky; top:0; z-index: 4; backdrop-filter: blur(10px) saturate(140%);
+      -webkit-backdrop-filter: blur(10px) saturate(140%); border-bottom:1px solid var(--line);
+      background: color-mix(in hsl, white 86%, transparent);
+    }
+    @media (prefers-color-scheme: dark){ .site-header{ background: color-mix(in hsl, black 86%, transparent); } }
+    .inner{ max-width: var(--container); margin: 0 auto; padding: 12px 20px; display:flex; align-items:center; justify-content:space-between; }
+    .brand{ font-weight: 800; letter-spacing: .01em; }
+    .nav a{ color: inherit; text-decoration: none; padding: 8px 10px; border-radius: 10px; }
+    .nav a:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
+
+    /* ===== Layout a due colonne (bento look) ===== */
+    .wrap-page{ max-width:var(--container); margin:0 auto; padding: clamp(16px, 3.6vw, 40px) 20px;
+      display:grid; grid-template-columns: 320px 1fr; gap: clamp(18px, 4vw, 42px); align-items:start; position:relative; z-index:1; }
+    @media (max-width: 880px){ .wrap-page{ grid-template-columns: 1fr; } }
+
+    /* Colonna sinistra */
+    .profile{ position: sticky; top: clamp(10px, 2.5vw, 28px); display:flex; flex-direction:column; gap:14px; }
+    .profile img{ width:100%; max-width:320px; height:auto; display:block; border-radius: var(--radius-lg); object-fit: cover; border:1px solid var(--line); }
+    @media (max-width:880px){ .profile{ position: static; max-width: 260px; } }
+
+    /* Azioni rapide */
+    .quick-share{ display:flex; gap:10px; flex-wrap:wrap; }
+    .qs-btn{ width:48px; height:48px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+      background: color-mix(in hsl, white 86%, transparent); color:#111827; border:1px solid var(--line);
+      -webkit-backdrop-filter: saturate(140%) blur(6px); backdrop-filter: saturate(140%) blur(6px);
+      transition: transform .06s ease, background .2s ease, border-color .2s ease; }
+    .qs-btn:hover{ transform: translateY(-1px); background: color-mix(in hsl, white 94%, transparent); border-color: rgba(0,0,0,.12); }
+    .qs-btn:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
+    .qs-btn img, .qs-btn svg{ width:22px; height:22px; display:block; }
+    @media (prefers-color-scheme: dark){
+      .qs-btn{ background: color-mix(in hsl, black 86%, transparent); color:#e5e7eb; }
+      .qs-btn:hover{ background: color-mix(in hsl, black 94%, transparent); border-color: rgba(255,255,255,.12); }
       .profile img{ border-color:#2b2b2b; }
     }
 
-    /* ===== Colonna destra ===== */
+    /* Colonna destra */
     .content{ display:grid; gap: clamp(18px, 3vw, 28px); }
-    .headline h1{
-      margin:0 0 6px; font-weight:700;
-      font-size: clamp(28px, 3.8vw, 44px); letter-spacing:-0.02em;
-    }
-    .headline .lead{
-  margin: 0;
-  color: #000;          /* ora è nero */
-  /* opzionale: un filo più grande */
-  /* font-size: clamp(1rem, 0.9rem + 0.4vw, 1.15rem); */
-}
+    .headline h1{ margin:0 0 6px; font-weight:800; font-size: clamp(28px, 3.6vw, 46px); letter-spacing:-0.02em; }
+    .headline .lead{ margin:0; color:#111; max-width: 60ch; }
+    @media (prefers-color-scheme: dark){ .headline .lead{ color:#ddd; } }
 
     .section-block{ display:grid; gap:12px; }
-    .section-title{
-      margin:0; font-size: var(--fs-1); font-weight:700; letter-spacing:.02em; text-transform: uppercase;
-    }
+    .section-title{ margin:0; font-size: var(--fs-1); font-weight:700; letter-spacing:.08em; text-transform: uppercase; opacity:.9; }
 
-    /* Pulsanti piatti (no ombre) */
+    /* Card / tiles premium */
     .tiles{ display:grid; gap:10px; }
-    .tile{
-      display:flex; align-items:center; gap:12px; text-decoration:none;
-      padding:14px 16px; border-radius:14px;
-      background: rgba(255,255,255,.86); color: var(--fg);
-      border:1px solid var(--line); box-shadow:none;
+    .tile{ display:flex; align-items:center; gap:12px; text-decoration:none; padding:14px 16px; border-radius:14px;
+      background: color-mix(in hsl, white 86%, transparent); color: var(--fg); border:1px solid var(--line);
       -webkit-backdrop-filter: saturate(140%) blur(6px); backdrop-filter: saturate(140%) blur(6px);
-      transition: background .2s ease, border-color .2s ease, transform .06s ease;
-    }
-    .tile:hover{ background: rgba(255,255,255,.94); border-color: rgba(0,0,0,.12); transform: translateY(-1px); }
+      transition: transform .06s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease; }
+    .tile:hover{ transform: translateY(-1px); background: color-mix(in hsl, white 94%, transparent); border-color: rgba(0,0,0,.12); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+    .tile:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
     .tile svg{ width:22px; height:22px; flex:0 0 22px; }
     .t-title{ font-weight:600; }
     .t-desc{ color:var(--muted); font-size:.92rem; }
-
     @media (prefers-color-scheme: dark){
-      .tile{ background: rgba(16,16,16,.86); }
-      .tile:hover{ background: rgba(16,16,16,.94); border-color: rgba(255,255,255,.12); }
+      .tile{ background: color-mix(in hsl, black 86%, transparent); }
+      .tile:hover{ background: color-mix(in hsl, black 94%, transparent); border-color: rgba(255,255,255,.12); box-shadow: 0 4px 16px rgba(0,0,0,.32); }
     }
 
-    /* Navbar vetrosa minima */
-    .site-header.nav{ background: rgba(255,255,255,.86); }
-    @media (prefers-color-scheme: dark){
-      .site-header.nav{ background: rgba(16,16,16,.86); }
-    }
-    /* Poster / Istruzioni di voto sopra i Social */
-.poster { display:flex; justify-content:center; }
-.vote-img{
-  width: 100%;
-  max-width: 860px;      /* grande ma responsivo */
-  height: auto;
-  display: block;
-  border-radius: 16px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.9); /* aiuta la leggibilità */
-  padding: 10px;         /* cornice sottile */
-  box-shadow: none;
-}
-@media (prefers-color-scheme: dark){
-  .vote-img{ background: rgba(16,16,16,.85); }
-}
+    /* Poster / Istruzioni di voto */
+    .poster{ display:flex; justify-content:center; }
+    .vote-img{ width:100%; max-width: 880px; height:auto; display:block; border-radius:16px; border:1px solid var(--line);
+      background: color-mix(in hsl, white 92%, transparent); padding: 10px; box-shadow:none; }
+    @media (prefers-color-scheme: dark){ .vote-img{ background: color-mix(in hsl, black 88%, transparent); } }
 
+    /* Footer */
+    .site-footer{ opacity:.8; font-size:.92rem; }
+
+    /* Motion (rispetta reduced motion) */
+    @keyframes fadeUp{ from{ opacity:0; transform: translateY(6px); } to{ opacity:1; transform:none; } }
+    .reveal{ animation: fadeUp .4s ease both; }
+    @media (prefers-reduced-motion: reduce){ .reveal{ animation: none; } .tile, .qs-btn{ transition: none; } }
+
+    /* Utils */
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .muted{ color:var(--muted); }
   </style>
 </head>
 <body>
+  <a href="#social" class="sr-only">Vai ai contenuti</a>
+
   <!-- Sfondo fisso full-screen -->
   <div class="page-bg" aria-hidden="true"></div>
 
-  <!-- Navbar (solo Social per ora) -->
-  <header class="site-header nav">
-    <div class="inner" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
-      <span class="brand" style="font-weight:700">Claudio Gemelli</span>
-      <nav style="display:flex;gap:12px;">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="inner">
+      <span class="brand">Claudio Gemelli</span>
+      <nav class="nav" aria-label="Primaria">
         <a href="#social">Social</a>
+        <a href="#extra">Extra</a>
       </nav>
     </div>
   </header>
 
-  <div class="wrap-page">
+  <main class="wrap-page" id="main">
     <!-- SINISTRA: immagine + share -->
-    <aside class="profile">
-      <img src="./assets/claudio.jpg?v=12" alt="Claudio Gemelli">
+    <aside class="profile reveal">
+      <img src="./assets/claudio.jpg?v=12" alt="Ritratto di Claudio Gemelli" width="640" height="800" decoding="async" sizes="(max-width:880px) 260px, 320px" />
 
       <!-- Bottoni circolari -->
       <div class="quick-share" role="group" aria-label="Condividi">
@@ -183,26 +179,21 @@
 
     <!-- DESTRA: contenuti -->
     <section class="content">
-      <div class="headline">
+      <div class="headline reveal" style="view-transition-name:headline;">
         <h1>CLAUDIO GEMELLI</h1>
-        <p class="lead">Ecco tutte le informazioni utili per seguire la campagna elettorale verso le elezioni regionali del 12 e 13 ottobre in Toscana</p>
+        <p class="lead">Tutte le informazioni utili per seguire la campagna elettorale verso le elezioni regionali del 12 e 13 ottobre in Toscana.</p>
       </div>
 
-      <!-- Social -->
       <!-- Poster: Istruzioni di voto -->
-<section class="section-block" id="istruzioni">
-  <h2 class="section-title" style="display:none">Istruzioni di voto</h2>
-  <div class="poster">
-    <img
-      src="./assets/istruzioni-voto.png?v=13"
-      alt="Istruzioni di voto"
-      class="vote-img"
-      width="85" height="55"
-    >
-  </div>
-</section>
+      <section class="section-block reveal" id="istruzioni">
+        <h2 class="section-title" style="display:none">Istruzioni di voto</h2>
+        <div class="poster">
+          <img src="./assets/istruzioni-voto.png?v=13" alt="Istruzioni di voto" class="vote-img" width="1200" height="760" loading="lazy" decoding="async">
+        </div>
+      </section>
 
-      <div id="social" class="section-block">
+      <!-- Social -->
+      <section id="social" class="section-block reveal">
         <h2 class="section-title">Social</h2>
         <div class="tiles">
           <a class="tile" href="https://www.instagram.com/claudio.gemelli.fdi/" target="_blank" rel="noopener">
@@ -221,10 +212,10 @@
             </div>
           </a>
         </div>
-      </div>
+      </section>
 
       <!-- Extra: Modulo contatti + Calendario appuntamenti -->
-      <div id="extra" class="section-block">
+      <section id="extra" class="section-block reveal">
         <h2 class="section-title">Extra</h2>
         <div class="tiles">
           <a class="tile" href="#" target="_blank" rel="noopener">
@@ -242,13 +233,17 @@
             </div>
           </a>
         </div>
-      </div>
+      </section>
 
-      <p class="muted">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></p>
+      <footer class="site-footer reveal">
+        <p class="muted">Contatti: <a href="mailto:votagemelli@gmail.com">votagemelli@gmail.com</a></p>
+      </footer>
     </section>
-  </div>
+  </main>
 
   <script>
+    document.documentElement.classList.remove('no-js');
+
     // Condivisione veloce
     const SITE_URL = (typeof window !== 'undefined' && window.location && window.location.href) ? window.location.href : '';
     const text = 'Scopri il programma e gli eventi:';
@@ -261,10 +256,26 @@
 
     if (qsShare) qsShare.addEventListener('click', async ()=>{
       if (navigator.share) {
-        try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(_){}
+        try { await navigator.share({ title: 'Vota Gemelli', text, url: SITE_URL }); return; } catch(_){/* no-op */}
       }
-      try { await navigator.clipboard.writeText(SITE_URL); } catch(_){}
+      try { await navigator.clipboard.writeText(SITE_URL); alert('Link copiato!'); } catch(_){/* no-op */}
     });
+  </script>
+
+  <!-- Schema.org Person (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Claudio Gemelli",
+    "url": "https://votagemelli.github.io/links/",
+    "image": "https://votagemelli.github.io/links/assets/claudio.jpg",
+    "email": "mailto:votagemelli@gmail.com",
+    "sameAs": [
+      "https://www.instagram.com/claudio.gemelli.fdi/",
+      "https://www.facebook.com/claudio.gemelli.fdi"
+    ]
+  }
   </script>
 </body>
 </html>
